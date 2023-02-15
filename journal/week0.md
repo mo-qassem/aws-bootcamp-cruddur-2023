@@ -18,7 +18,8 @@
 
 - **Use EventBridge to hookup Health Dashboard to SNS and send notification when there is a service health issue.**
   1. create eventbridge rule watching any event from AWS health Dashboard matching any service any resouce (not create any resouce yet).
-  ![EventBridge](/aws-bootcamp-cruddur-2023/journal/screenshots/eventbridge.png)
+
+  ![EventBridge](/journal/screenshots/eventbridge.png)
 
     
   
