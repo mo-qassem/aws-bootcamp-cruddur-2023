@@ -31,10 +31,17 @@
 
 
 - **Create an architectural diagram (to the best of your ability) the CI/CD logical pipeline in Lucid Charts.**
-  1. create conceptual diagram to discuss core services. [lucid.app link](https://lucid.app/lucidchart/528e2147-f727-422f-b5d2-7781c6539b58/edit?invitationId=inv_0b9d5529-b1f3-4ece-ae44-06c6bfce333f)
-  ![conceptual diagram](/journal/screenshots/Cruddur - conceptual diagram.png)
+  1. create conceptual diagram to communicate the architecture to key stakeholders. [lucid.app link](https://lucid.app/lucidchart/528e2147-f727-422f-b5d2-7781c6539b58/edit?invitationId=inv_0b9d5529-b1f3-4ece-ae44-06c6bfce333f)
+ 
+  ![conceptual diagram](/journal/screenshots/cruddur_conceptual_diagram.png)
   
   2. create logical digram for CI/CD tools on aws.  [lucid.app link](https://lucid.app/lucidchart/f67ad73b-363b-47f3-b7a5-5b37801a4b9a/edit?invitationId=inv_a3360ace-38a6-47a2-93f0-b7e780647a14)
-  ![logical diagram](/journal/screenshots/Cruddur - CI_CD Pipeline.png)
-    
+
+  ![logical diagram](/journal/screenshots/cruddur_cicd_pipeline.png)
+
+ 3. create logical digram to communicate the broad strokes  of the technical architecture to engineers. [lucid.app link](https://lucid.app/lucidchart/a732e814-2839-48ee-9ddd-7fd5d9593d1a/edit?invitationId=inv_cb5556ca-c556-4848-ba34-02e9ad45cdb6)
+
+  ![logical diagram](/journal/screenshots/cruddur_logical_digram.png)
+  
+
   
