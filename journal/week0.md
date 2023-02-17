@@ -84,7 +84,7 @@
   ![logical diagram](/journal/screenshots/cruddur_cicd_pipeline.png)
   
 ### 5. Research the technical and service limits of specific services and how they could impact the technical path for technical flexibility. 
-- We did our research and we found Amazon Elastic Container Service does not have a free tier allowance and Amazon Elastic Container Registry has only 500MB which lead to utilizing Amazon Elastic Container Service with EC2 mode to employ the 750 hours included with free tier.
+- We did our research and we found Amazon Elastic Container Service does not have a free tier allowance and Amazon Elastic Container Registry has only 500MB which lead us to utilize Amazon Elastic Container Service in EC2 mode to employ the 750 hours included with free tier.
 
 
 ### 6. Open a support ticket and request a service limit.
