@@ -1,5 +1,7 @@
 # Week 1 — App Containerization
+
 ### Homework Tasks
+
 - [x] Containerize Application (Dockerfiles, Docker Compose).
 - [x] Document the Notification Endpoint for the OpenAI Document.
 - [x] Write a Flask Backend Endpoint for Notifications.
@@ -9,35 +11,38 @@
 
 ---
 
-## 1. Containerize Application (Dockerfiles, Docker Compose).
-- ### First: Create Dockerfile for both Backend-flask & Frontend-reactjs app.
+## 1. Containerize Application (Dockerfiles, Docker Compose)
+
+- ### First: Create Dockerfile for both Backend-flask & Frontend-reactjs app
+
   - **Create file with name of `Dockerfile` for Backend-flask app**.
-  
-      ```dockerfile
-     FROM python:3.10-slim-buster
 
-     WORKDIR /backend-flask
+    ```dockerfile
+    FROM python:3.10-slim-buster
 
-     COPY requirements.txt requirements.txt
+    WORKDIR /backend-flask
 
-     RUN pip3 install -r requirements.txt
+    COPY requirements.txt requirements.txt
 
-     COPY . .
+    RUN pip3 install -r requirements.txt
 
-     ENV FLASK_ENV=development
+    COPY . .
 
-     EXPOSE ${PORT}
+    ENV FLASK_ENV=development
 
-     CMD ["python3", "-m" , "flask", "run", "--host=0.0.0.0", "--port=4567"]
-     ```
-      **To build the image run..**
-       ```bash
-       docker build -t moqassem/cruddur-backend-flask:latest ./backend-flask
-       ```
-       
-       
+    EXPOSE ${PORT}
+
+    CMD ["python3", "-m" , "flask", "run", "--host=0.0.0.0", "--port=4567"]
+    ```
+
+    **To build the image run..**
+
+    ```bash
+    docker build -t moqassem/cruddur-backend-flask:latest ./backend-flask
+    ```
+
   - **Create file with name of `Dockerfile` for Frontend-reactjs App.**
-  
+
     ```dockerfile
     FROM node:16.18
 
@@ -53,12 +58,15 @@
 
     CMD ["npm", "start"]
     ```
+
     **To build the image run..**
+
     ```bash
     docker build -t moqassem/cruddur-frontend-reactjs:latest ./frontend-react-js
     ```
-   
-- ### Second: Create `docker-compose` file with `.yaml` extention.
+
+- ### Second: Create `docker-compose` file with `.yaml` extention
+
   ```yaml
   version: "3.8"
   services:
@@ -79,36 +87,331 @@
         - "3000:3000"
       volumes:
         - ./frontend-react-js:/frontend-react-js
-  networks: 
+  networks:
     internal-network:
       driver: bridge
       name: cruddur
+  ```
+
+---
+
+## 2. Document the Notification Endpoint for the OpenAPI Document
+
+- ### What is OpenAPI Document
+
+- #### Definition
+  > The OpenAPI Specification is a standard format to define structure and syntax REST APIs. OpenAPI documents are both machine and human-readable, which enables anyone to easily determine how each API works. Engineers building APIs can use APIs to plan and design servers, generate code, and implement contract testing. Other internal teams can aggregate these API definitions to determine their API program’s footprint and dependencies.
+- #### There are three primary areas in every OpenAPI document
+  > - **Endpoints** (i.e. paths appended to the server URL) and the HTTP methods they support. For each method, any parameters that may or must be included in the request and the response formats for the possible HTTP response codes are specified.
+  > - **Reusable components** that can be used across multiple endpoints in the API, such as common request parameters and response formats.
+  > - **Meta information**, including the title, version, and description of the API, authentication method, and location of the API servers.
+- ### We added the below section to our `openapi-3.yaml` file to fulfill the required task
+
+  ```yaml
+  /api/activities/notifications:
+  get:
+    description: "Return a feed of activity for all of those that I follow"
+    tags:
+      - activities
+    parameters: []
+    responses:
+    "200":
+      description: Returns an array of activities
+      content:
+      application/json:
+        schema:
+        type: array
+        items:
+          $ref: "#/components/schemas/Activity"
+  ```
+
+---
+
+## 3. Write a Flask Backend Endpoint for Notifications
+
+- ### First: We created new `notifications_activities.py` under `backend-flask/services/`
+
+  ```python
+  from datetime import datetime, timedelta, timezone
+  class NotificationsActivities:
+  def run():
+      now = datetime.now(timezone.utc).astimezone()
+      results = [{
+      'uuid': '68f126b0-1ceb-4a33-88be-d90fa7109eee',
+      'handle':  'Mohamed Qassem',
+      'message': 'Hello From Cruddur!',
+      'created_at': (now - timedelta(days=2)).isoformat(),
+      'expires_at': (now + timedelta(days=5)).isoformat(),
+      'likes_count': 5,
+      'replies_count': 1,
+      'reposts_count': 0,
+      'replies': [{
+          'uuid': '26e12864-1c26-5c3a-9658-97a10f8fea67',
+          'reply_to_activity_uuid': '68f126b0-1ceb-4a33-88be-d90fa7109eee',
+          'handle':  'worf',
+          'message': 'this post has no honor!',
+          'likes_count': 10,
+          'replies_count': 5,
+          'reposts_count': 10,
+          'created_at': (now - timedelta(days=2)).isoformat()
+      }],
+      }
+      ]
+      return results
+  ```
+
+- ### Second: We updated `app.py` file with the below code
+
+  ```python
+  from services.notifications_activities import *
+  ```
+
+  ```python
+  @app.route("/api/activities/notifications", methods=['GET'])
+  def data_notifications():
+  data = NotificationsActivities.run()
+  return data, 200
+  ```
+
+---
+
+## 4. Write a React Page for Notifications
+
+- ### First: Under `frontend-react-js/src/pages/` we created two new files
+
+  - `NotificationsFeedPage.js`
+
+    ```javascript
+    import "./NotificationsFeedPage.css";
+    import React from "react";
+
+    import DesktopNavigation from "../components/DesktopNavigation";
+    import DesktopSidebar from "../components/DesktopSidebar";
+    import ActivityFeed from "../components/ActivityFeed";
+    import ActivityForm from "../components/ActivityForm";
+    import ReplyForm from "../components/ReplyForm";
+
+    // [TODO] Authenication
+    import Cookies from "js-cookie";
+
+    export default function NotificationsFeedPage() {
+      const [activities, setActivities] = React.useState([]);
+      const [popped, setPopped] = React.useState(false);
+      const [poppedReply, setPoppedReply] = React.useState(false);
+      const [replyActivity, setReplyActivity] = React.useState({});
+      const [user, setUser] = React.useState(null);
+      const dataFetchedRef = React.useRef(false);
+
+      const loadData = async () => {
+        try {
+          const backend_url = `${process.env.REACT_APP_BACKEND_URL}/api/activities/notifications`;
+          const res = await fetch(backend_url, {
+            method: "GET",
+          });
+          let resJson = await res.json();
+          if (res.status === 200) {
+            setActivities(resJson);
+          } else {
+            console.log(res);
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      };
+
+      const checkAuth = async () => {
+        console.log("checkAuth");
+        // [TODO] Authenication
+        if (Cookies.get("user.logged_in")) {
+          setUser({
+            display_name: Cookies.get("user.name"),
+            handle: Cookies.get("user.username"),
+          });
+        }
+      };
+
+      React.useEffect(() => {
+        //prevents double call
+        if (dataFetchedRef.current) return;
+        dataFetchedRef.current = true;
+
+        loadData();
+        checkAuth();
+      }, []);
+
+      return (
+        <article>
+          <DesktopNavigation
+            user={user}
+            active={"notifications"}
+            setPopped={setPopped}
+          />
+          <div className="content">
+            <ActivityForm
+              popped={popped}
+              setPopped={setPopped}
+              setActivities={setActivities}
+            />
+            <ReplyForm
+              activity={replyActivity}
+              popped={poppedReply}
+              setPopped={setPoppedReply}
+              setActivities={setActivities}
+              activities={activities}
+            />
+            <ActivityFeed
+              title="Notifications"
+              setReplyActivity={setReplyActivity}
+              setPopped={setPoppedReply}
+              activities={activities}
+            />
+          </div>
+          <DesktopSidebar user={user} />
+        </article>
+      );
+    }
     ```
+
+  - `NotificationsFeedPage.css`.
+
+    ```css
+    article {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+    }
+    ```
+
+- ### Second: we updated `App.js` under `frontend-react-js/src/`
+
+  ```javascript
+  import NotificationsFeedPage from "./pages/NotificationsFeedPage";
+  ```
+
+  ```javascript
+  import {
+  createBrowserRouter,
+  RouterProvider
+  } from "react-router-dom";
+  const router = createBrowserRouter([
+  {
+    path: "/notifications",
+    element: <NotificationsFeedPage />
+  },
+  ```
+
 ---
 
+## 5. Run DynamoDB Local Container and ensure it works
 
-## 2. Document the Notification Endpoint for the OpenAI Document.
+- ### First: We update the `docker-compose` file
 
-## 3. Write a Flask Backend Endpoint for Notifications.
-## 4. Write a React Page for Notifications.
-## 5. Run DynamoDB Local Container and ensure it works.
-## 6. Run Postgres Container and ensure it works.
+  ```yaml
+  version: "3.8"
+  services:
+  dynamodb-local:
+    user: root
+    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
+    image: "amazon/dynamodb-local:latest"
+    container_name: dynamodb-local
+    ports:
+      - "8000:8000"
+    volumes:
+      - "./docker/dynamodb:/home/dynamodblocal/data"
+    working_dir: /home/dynamodblocal
+  ```
 
+- ### Second: To make sure that it is working fine
 
+  - #### We create dynamodb table
+
+    ```bash
+    aws dynamodb create-table \
+        --endpoint-url http://localhost:8000 \
+        --table-name Music \
+        --attribute-definitions \
+            AttributeName=Artist,AttributeType=S \
+            AttributeName=SongTitle,AttributeType=S \
+        --key-schema AttributeName=Artist,KeyType=HASH AttributeName=SongTitle,KeyType=RANGE \
+        --provisioned-throughput ReadCapacityUnits=1,WriteCapacityUnits=1 \
+        --table-class STANDARD
+    ```
+
+  - #### We create an Item
+
+    ```bash
+    aws dynamodb put-item \
+        --endpoint-url http://localhost:8000 \
+        --table-name Music \
+        --item \
+            '{"Artist": {"S": "No One You Know"}, "SongTitle": {"S": "Call Me Today"}, "AlbumTitle": {"S": "Somewhat Famous"}}' \
+        --return-consumed-capacity TOTAL
+    ```
+
+  - #### We create an Item & list a table.
+
+    ```bash
+    aws dynamodb list-tables --endpoint-url http://localhost:8000
+
+    aws dynamodb scan --table-name Music --query "Items" --endpoint-url http://localhost:8000
+    ```
+
+    ![response from db](/journal/screenshots/week1_db_response.png)
+
+## 6. Run Postgres Container and ensure it works
+
+- ### First: We update the `docker-compose` file with
+
+  ```yaml
+  version: "3.8"
+  services:
+  postgres-db:
+      image: postgres:13-alpine
+      restart: always
+      environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      ports:
+      - "5432:5432"
+      volumes:
+      - postgres-db:/var/lib/postgresql/data
+  volumes:
+  postgres-db:
+      driver: local
+  ```
+
+- ### Second: we update `.gitpod.yaml` to install postgres client to be able to interact with postgres db server.
+
+  ```yaml
+  tasks:
+    - name: Initiate Postgres client
+      init: |
+        curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc|sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg
+        echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" |sudo tee  /etc/apt/sources.list.d/pgdg.list
+        sudo apt update
+        sudo apt install -y postgresql-client-13 libpq-dev
+  vscode:
+    extensions:
+      - 42Crunch.vscode-openapi
+      - cweijan.vscode-postgresql-client2
+  ```
+
+  - #### To verfiy we run
+
+  ```bash
+  psql -U postgres -h localhost
+  ```
+
+  ![response from postgres](/journal/screenshots/week1_postgres.png)
 
 ---
 
-###  Homework Challenges
+### Homework Challenges
+
 - [x] Run the dockerfile CMD as an external script.
 - [x] Push and tag a image to DockerHub (they have a free tier).
 - [x] Use multi-stage building for a Dockerfile build.
 - [x] Implement a healthcheck in the V3 Docker compose file.
-- [x] Research best practices of Dockerfiles and attempt to implement it in your Dockerfile. 
+- [x] Research best practices of Dockerfiles and attempt to implement it in your Dockerfile.
 - [x] Learn how to install Docker on your localmachine and get the same containers running outside of Gitpod / Codespaces.
-- [x] Launch an EC2 instance that has docker installed, and pull a container to demonstrate you can run your own docker processes. 
-
-
-
-
-
-
+- [x] Launch an EC2 instance that has docker installed, and pull a container to demonstrate you can run your own docker processes.
