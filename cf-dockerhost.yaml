@@ -32,7 +32,10 @@ Resources:
           curl -fsSL https://get.docker.com -o get-docker.sh
           sudo sh ./get-docker.sh
           sudo usermod -aG docker ubuntu
-          wget https://github.com/mo-qassem/aws-bootcamp-cruddur-2023/tree/main/journal/others/docker-compose.yaml
+          sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          cd home/ubuntu/
+          wget https://raw.githubusercontent.com/mo-qassem/aws-bootcamp-cruddur-2023/main/journal/others/docker-compose.yaml
           docker compose up -d
       Tags:
         - Key: Name

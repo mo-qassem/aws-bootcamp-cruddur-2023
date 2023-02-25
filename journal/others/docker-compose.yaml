@@ -7,8 +7,6 @@ services:
     image: moqassem/cruddur-backend:normal
     ports:
       - "4567:4567"
-    volumes:
-      - ./backend-flask:/backend-flask
   cruddur-frontend-reactjs:
     environment:
       REACT_APP_BACKEND_URL: "http://localhost:4567"
@@ -16,7 +14,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - ./frontend-react-js:/frontend-react-js
+      - /frontend-react-js/node_modules
   dynamodb-local:
     user: root
     command: "-jar DynamoDBLocal.jar -sharedDb -dbPath ./data"
@@ -36,7 +34,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres-db:/var/lib/postgresql/data
+      - "postgres-db:/var/lib/postgresql/data"
 volumes:
   postgres-db:
     driver: local

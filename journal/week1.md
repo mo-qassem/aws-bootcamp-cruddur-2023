@@ -471,10 +471,70 @@
 
 ## 06. Learn how to install Docker on your localmachine and get the same containers running outside of Gitpod / Codespaces.
 
+- ### Face new error, solve it by add the below command to `frontend-react-js` `Dockerfile`.
+
+```dockerfile
+  RUN mkdir -p node_modules/.cache && chmod -R 777 node_modules/.cache
+```
+
+![local-deployment](/journal/screenshots/week1_local_error.png)
+
+![local-deployment](/journal/screenshots/week1_docker_running.png)
+
+![local-deployment](/journal/screenshots/week1_homepage.png)
+
+![local-deployment](/journal/screenshots/week1_homepage_after_signin.png)
+
 ## 07. Launch an EC2 instance that has docker installed, and pull a container to demonstrate you can run your own docker processes.
 
 - ### Create `cloudformation tamplete` to bootstrap
 
-```
+  ```yaml
+  AWSTemplateFormatVersion: 2010-09-09
+  Description: Cruddur-DEV
 
-```
+  Parameters:
+    EnvName:
+      Type: String
+      Default: "Cruddur-DEV"
+    InstanceAMI:
+      Description: Ubuntu Image Id
+      Type: String
+      Default: ami-0557a15b87f6559cf
+    InstanceType:
+      Description: Allowed instance type to launch
+      Type: String
+      Default: "t2.micro"
+
+  Resources:
+    DockerHostKeyPair:
+      Type: AWS::EC2::KeyPair
+      Properties:
+        KeyName: !Sub ${EnvName}-DockerHost-KP
+        KeyType: rsa
+    DockerHostInstance:
+      Type: AWS::EC2::Instance
+      Properties:
+        InstanceType: !Ref InstanceType
+        ImageId: !Ref InstanceAMI
+        KeyName: !Ref DockerHostKeyPair
+        UserData:
+          Fn::Base64: !Sub |
+            #!/bin/bash
+            curl -fsSL https://get.docker.com -o get-docker.sh
+            sudo sh ./get-docker.sh
+            sudo usermod -aG docker ubuntu
+            sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
+            cd home/ubuntu/
+            wget https://raw.githubusercontent.com/mo-qassem/aws-bootcamp-cruddur-2023/main/journal/others/docker-compose.yaml
+            docker compose up -d
+        Tags:
+          - Key: Name
+            Value: !Sub ${EnvName}-DockerHost
+  Outputs:
+    DockerHostPublicIp:
+      Value: !GetAtt DockerHostInstance.PublicIp
+    DockerHostPairId:
+      Value: !GetAtt DockerHostKeyPair.KeyPairId
+  ```
