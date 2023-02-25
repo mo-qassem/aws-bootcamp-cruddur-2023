@@ -19,19 +19,12 @@
 
     ```dockerfile
     FROM python:3.10-slim-buster
-
     WORKDIR /backend-flask
-
     COPY requirements.txt requirements.txt
-
     RUN pip3 install -r requirements.txt
-
     COPY . .
-
     ENV FLASK_ENV=development
-
     EXPOSE ${PORT}
-
     CMD ["python3", "-m" , "flask", "run", "--host=0.0.0.0", "--port=4567"]
     ```
 
@@ -45,17 +38,11 @@
 
     ```dockerfile
     FROM node:16.18
-
     WORKDIR /frontend-react-js
-
     COPY . /frontend-react-js
-
     RUN npm install
-
     ENV PORT=3000
-
     EXPOSE ${PORT}
-
     CMD ["npm", "start"]
     ```
 
@@ -93,8 +80,6 @@
       name: cruddur
   ```
 
----
-
 ## 2. Document the Notification Endpoint for the OpenAPI Document
 
 - ### What is OpenAPI Document
@@ -105,7 +90,7 @@
   > - **Endpoints** (i.e. paths appended to the server URL) and the HTTP methods they support. For each method, any parameters that may or must be included in the request and the response formats for the possible HTTP response codes are specified.
   > - **Reusable components** that can be used across multiple endpoints in the API, such as common request parameters and response formats.
   > - **Meta information**, including the title, version, and description of the API, authentication method, and location of the API servers.
-- ### We added the below section to our `openapi-3.yaml` file to fulfill the required task
+- ### Add the below section to `openapi-3.yaml` file to fulfill the required task
 
   ```yaml
   /api/activities/notifications:
@@ -125,11 +110,9 @@
           $ref: "#/components/schemas/Activity"
   ```
 
----
-
 ## 3. Write a Flask Backend Endpoint for Notifications
 
-- ### First: We created new `notifications_activities.py` under `backend-flask/services/`
+- ### First: Create new `notifications_activities.py` under `backend-flask/services/`
 
   ```python
   from datetime import datetime, timedelta, timezone
@@ -160,7 +143,7 @@
       return results
   ```
 
-- ### Second: We updated `app.py` file with the below code
+- ### Second: Update `app.py` file with the below code
 
   ```python
   from services.notifications_activities import *
@@ -173,11 +156,9 @@
   return data, 200
   ```
 
----
-
 ## 4. Write a React Page for Notifications
 
-- ### First: Under `frontend-react-js/src/pages/` we created two new files
+- ### First: Under `frontend-react-js/src/pages/` create two new files
 
   - `NotificationsFeedPage.js`
 
@@ -282,7 +263,7 @@
     }
     ```
 
-- ### Second: we updated `App.js` under `frontend-react-js/src/`
+- ### Second: Update `App.js` under `frontend-react-js/src/`
 
   ```javascript
   import NotificationsFeedPage from "./pages/NotificationsFeedPage";
@@ -300,11 +281,9 @@
   },
   ```
 
----
-
 ## 5. Run DynamoDB Local Container and ensure it works
 
-- ### First: We update the `docker-compose` file
+- ### First: Update the `docker-compose` file
 
   ```yaml
   version: "3.8"
@@ -323,7 +302,7 @@
 
 - ### Second: To make sure that it is working fine
 
-  - #### We create dynamodb table
+  - #### Create dynamodb table
 
     ```bash
     aws dynamodb create-table \
@@ -337,7 +316,7 @@
         --table-class STANDARD
     ```
 
-  - #### We create an Item
+  - #### Create an Item
 
     ```bash
     aws dynamodb put-item \
@@ -348,7 +327,7 @@
         --return-consumed-capacity TOTAL
     ```
 
-  - #### We create an Item & list a table.
+  - #### Run
 
     ```bash
     aws dynamodb list-tables --endpoint-url http://localhost:8000
@@ -360,7 +339,7 @@
 
 ## 6. Run Postgres Container and ensure it works
 
-- ### First: We update the `docker-compose` file with
+- ### First: Update the `docker-compose` file with
 
   ```yaml
   version: "3.8"
@@ -380,7 +359,7 @@
       driver: local
   ```
 
-- ### Second: we update `.gitpod.yaml` to install postgres client to be able to interact with postgres db server.
+- ### Second: Update `.gitpod.yaml` to install postgres client to be able to interact with postgres db server.
 
   ```yaml
   tasks:
@@ -396,7 +375,7 @@
       - cweijan.vscode-postgresql-client2
   ```
 
-  - #### To verfiy we run
+  - #### Run
 
   ```bash
   psql -U postgres -h localhost
@@ -415,3 +394,87 @@
 - [x] Research best practices of Dockerfiles and attempt to implement it in your Dockerfile.
 - [x] Learn how to install Docker on your localmachine and get the same containers running outside of Gitpod / Codespaces.
 - [x] Launch an EC2 instance that has docker installed, and pull a container to demonstrate you can run your own docker processes.
+
+---
+
+## 01. Run the dockerfile CMD as an external script.
+
+- ### Create script file under name `start-backend`
+  ```bash
+  #!/bin/bash
+  python3 -m flask run --host=0.0.0.0 --port=4567
+  ```
+- ### Update`Dockerfile` to use that script as CMD
+
+  ```dockerfile
+  FROM python:3.10-slim-buster
+  WORKDIR /backend-flask
+  COPY . .
+  RUN pip3 install -r requirements.txt
+  COPY start-backend /usr/local/bin
+  RUN chmod 770 /usr/local/bin/*
+  ENV FLASK_ENV=development
+  EXPOSE ${PORT}
+  CMD ["start-backend"]
+  ```
+
+## 02. Push and tag a image to DockerHub (they have a free tier).
+
+- ### To login to docker-hub account
+  ```bash
+  docker login -u (username) -p (password)
+  ```
+- ### To tag existing images.
+  ```bash
+  docker tag (existing-image-name):(existing-tag) (docker-username)/(new-image-name):(new-tag)
+  ```
+- ### To upload images to docker-hub.
+  ```bash
+  docker image push (username)/(new-image-name):(new-tag)
+  ```
+  ![docker-hub](/journal/screenshots/week1_docker-hub.png)
+
+## 03. Use multi-stage building for a Dockerfile build.
+
+- ### Create new `Dockerfile.builder`, reduce frontend image size from `1.19GB` to `412MB`.
+
+  ```dockerfile
+  FROM node:16.18 AS builder
+  WORKDIR /frontend-react-js
+  COPY ./frontend-react-js/ /frontend-react-js
+  RUN npm install
+
+  FROM node:alpine
+  WORKDIR /frontend-app
+  COPY --from=builder /frontend-react-js /frontend-app
+  ENV PORT=3000
+  EXPOSE ${PORT}
+  CMD ["npm", "start"]
+  ```
+
+  ![docker-images](/journal/screenshots/week1_images.png)
+
+## 04. Implement a healthcheck in the V3 Docker compose file.
+
+- ### Update `docker-compose` with simple `crul command` to check the health of backend.
+
+  ```yaml
+  healthcheck:
+    test: ["curl -f http://localhost:4567/api/activites/home || exit 1"]
+    interval: 30s
+    timeout: 10s
+    retries: 2
+    start_period: 30s
+  ```
+
+## 05. Research best practices of Dockerfiles and attempt to implement it in your Dockerfile.
+
+## 06. Learn how to install Docker on your localmachine and get the same containers running outside of Gitpod / Codespaces.
+
+## 07. Launch an EC2 instance that has docker installed, and pull a container to demonstrate you can run your own docker processes.
+
+- ### Create `cloudformation tamplete` to bootstrap
+
+```
+
+```
