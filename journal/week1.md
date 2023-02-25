@@ -469,6 +469,11 @@
 
 ## 05. Research best practices of Dockerfiles and attempt to implement it in your Dockerfile.
 
+- #### Minimize the number of layers.
+  > That is what we did with multistage by offloading the heavy lifting to the first Docker image and copying the artifact to the second image with a minimal base image to lunch applications.
+- #### Decouple applications.
+  > Each container should have only one concern. Decoupling applications into multiple containers makes it easier to scale horizontally and reuse containers, similler like we doing with **cruddur**.
+
 ## 06. Learn how to install Docker on your localmachine and get the same containers running outside of Gitpod / Codespaces.
 
 - ### Faced new error, solved it by add the below command to `frontend-react-js` `Dockerfile`.
@@ -540,6 +545,13 @@
   ```
 
 - ### Delpoy it using local AWS CLI
+
   ```bash
   aws cloudformation create-stack --stack-name dockerhost --template-body file://cf-dockerhost.yaml  --capabilities "CAPABILITY_NAMED_IAM" --region us-east-1 --profile cruddur
   ```
+
+  ![cloud-deployment](/journal/screenshots/week1_cloud_deploy_home.png)
+
+  ![cloud-deployment](/journal/screenshots/week1_cloud_deploy_notif.png)
+
+  ![cloud-deployment](/journal/screenshots/week1_cloud_deploy_console.png)
