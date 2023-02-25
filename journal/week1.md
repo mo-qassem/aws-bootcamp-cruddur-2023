@@ -460,7 +460,7 @@
 
   ```yaml
   healthcheck:
-    test: ["curl -f http://localhost:4567/api/activites/home || exit 1"]
+    test: "curl -f http://localhost:4567/api/activites/home || exit 1"
     interval: 30s
     timeout: 10s
     retries: 2
@@ -494,47 +494,52 @@
   Description: Cruddur-DEV
 
   Parameters:
-    EnvName:
-      Type: String
-      Default: "Cruddur-DEV"
-    InstanceAMI:
-      Description: Ubuntu Image Id
-      Type: String
-      Default: ami-0557a15b87f6559cf
-    InstanceType:
-      Description: Allowed instance type to launch
-      Type: String
-      Default: "t2.micro"
+  EnvName:
+    Type: String
+    Default: "Cruddur-DEV"
+  InstanceAMI:
+    Description: Ubuntu Image Id
+    Type: String
+    Default: ami-0557a15b87f6559cf
+  InstanceType:
+    Description: Allowed instance type to launch
+    Type: String
+    Default: "t2.micro"
 
   Resources:
-    DockerHostKeyPair:
-      Type: AWS::EC2::KeyPair
-      Properties:
-        KeyName: !Sub ${EnvName}-DockerHost-KP
-        KeyType: rsa
-    DockerHostInstance:
-      Type: AWS::EC2::Instance
-      Properties:
-        InstanceType: !Ref InstanceType
-        ImageId: !Ref InstanceAMI
-        KeyName: !Ref DockerHostKeyPair
-        UserData:
-          Fn::Base64: !Sub |
-            #!/bin/bash
-            curl -fsSL https://get.docker.com -o get-docker.sh
-            sudo sh ./get-docker.sh
-            sudo usermod -aG docker ubuntu
-            sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
-            sudo chmod +x /usr/local/bin/docker-compose
-            cd home/ubuntu/
-            wget https://raw.githubusercontent.com/mo-qassem/aws-bootcamp-cruddur-2023/main/journal/others/docker-compose.yaml
-            docker compose up -d
-        Tags:
-          - Key: Name
-            Value: !Sub ${EnvName}-DockerHost
+  DockerHostKeyPair:
+    Type: AWS::EC2::KeyPair
+    Properties:
+      KeyName: !Sub ${EnvName}-DockerHost-KP
+      KeyType: rsa
+  DockerHostInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref InstanceType
+      ImageId: !Ref InstanceAMI
+      KeyName: !Ref DockerHostKeyPair
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          curl -fsSL https://get.docker.com -o get-docker.sh
+          sudo sh ./get-docker.sh
+          sudo usermod -aG docker ubuntu
+          sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+          sudo chmod +x /usr/local/bin/docker-compose
+          cd home/ubuntu/
+          wget https://raw.githubusercontent.com/mo-qassem/aws-bootcamp-cruddur-2023/main/journal/others/docker-compose.yaml
+          docker compose up -d
+      Tags:
+        - Key: Name
+          Value: !Sub ${EnvName}-DockerHost
   Outputs:
-    DockerHostPublicIp:
-      Value: !GetAtt DockerHostInstance.PublicIp
-    DockerHostPairId:
-      Value: !GetAtt DockerHostKeyPair.KeyPairId
+  DockerHostPublicIp:
+    Value: !GetAtt DockerHostInstance.PublicIp
+  DockerHostPairId:
+    Value: !GetAtt DockerHostKeyPair.KeyPairId
+  ```
+
+- ### Delpoy it using local AWS CLI
+  ```bash
+  aws cloudformation create-stack --stack-name dockerhost --template-body file://cf-dockerhost.yaml  --capabilities "CAPABILITY_NAMED_IAM" --region us-east-1 --profile cruddur
   ```

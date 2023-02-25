@@ -8,7 +8,7 @@ services:
     ports:
       - "4567:4567"
     healthcheck:
-      test: ["curl -f http://localhost:4567/api/activites/home || exit 1"]
+      test: "curl -f http://localhost:4567/api/activites/home || exit 1"
       interval: 30s
       timeout: 10s
       retries: 2
