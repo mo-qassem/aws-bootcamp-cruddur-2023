@@ -7,6 +7,12 @@ services:
     image: moqassem/cruddur-backend:normal
     ports:
       - "4567:4567"
+    healthcheck:
+      test: ["curl -f http://localhost:4567/api/activites/home || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 2
+      start_period: 30s
   cruddur-frontend-reactjs:
     environment:
       REACT_APP_BACKEND_URL: "http://localhost:4567"

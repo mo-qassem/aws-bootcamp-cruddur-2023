@@ -399,7 +399,7 @@
 
 ## 01. Run the dockerfile CMD as an external script.
 
-- ### Create script file under name `start-backend`
+- ### Create script file name `start-backend` under `aws-bootcamp-cruddur-2023/backend-flask`
   ```bash
   #!/bin/bash
   python3 -m flask run --host=0.0.0.0 --port=4567
@@ -420,7 +420,7 @@
 
 ## 02. Push and tag a image to DockerHub (they have a free tier).
 
-- ### To login to docker-hub account
+- ### To login to docker-hub account locally.
   ```bash
   docker login -u (username) -p (password)
   ```
@@ -471,7 +471,7 @@
 
 ## 06. Learn how to install Docker on your localmachine and get the same containers running outside of Gitpod / Codespaces.
 
-- ### Face new error, solve it by add the below command to `frontend-react-js` `Dockerfile`.
+- ### Faced new error, solved it by add the below command to `frontend-react-js` `Dockerfile`.
 
 ```dockerfile
   RUN mkdir -p node_modules/.cache && chmod -R 777 node_modules/.cache
@@ -487,7 +487,7 @@
 
 ## 07. Launch an EC2 instance that has docker installed, and pull a container to demonstrate you can run your own docker processes.
 
-- ### Create `cloudformation tamplete` to bootstrap
+- ### Create `cloudformation template` to bootstrap a `t2.micro` running ubuntu image to install docker & docker compose and retrieve a custom `docker-compose` file to lunch two cruddur app backend & frontend.
 
   ```yaml
   AWSTemplateFormatVersion: 2010-09-09
