@@ -31,7 +31,8 @@ class NotificationsActivities:
     ]
     # ------------- Start AWS-X Ray In App-code Config -------------------
     dict = {
-      'now': now.isoformat()
+      'now': now.isoformat(),
+      'results-size': results[0].values()
     }
     subsegment.put_metadata('key', dict, 'namespace')
     xray_recorder.end_subsegment()
