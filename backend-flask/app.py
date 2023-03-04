@@ -14,7 +14,30 @@ from services.messages import *
 from services.create_message import *
 from services.show_activity import *
 
-# -------------AWS-X Ray Global-Config-------------------
+#--------------Honeycomb Global-Config-------------------
+from opentelemetry import trace
+from opentelemetry.instrumentation.flask import FlaskInstrumentor
+from opentelemetry.instrumentation.requests import RequestsInstrumentor
+from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+#--Show Logs in STOUT-Testing
+from opentelemetry.sdk.trace.export import ConsoleSpanExporter, SimpleSpanProcessor
+#--------Initialize tracing and an exporter that can send data to Honeycomb------
+provider = TracerProvider()
+processor = BatchSpanProcessor(OTLPSpanExporter())
+provider.add_span_processor(processor)
+
+#--Show Logs in STOUT-Testing
+simple_processor = SimpleSpanProcessor(ConsoleSpanExporter())
+provider.add_span_processor(simple_processor)
+
+trace.set_tracer_provider(provider)
+tracer = trace.get_tracer(__name__)
+#-----------------------------------------------------------
+
+
+# -------------AWS-X Ray Global-Config---------------------
 from aws_xray_sdk.core import xray_recorder
 from aws_xray_sdk.ext.flask.middleware import XRayMiddleware
 xray_url = os.getenv("AWS_XRAY_URL")
@@ -46,6 +69,12 @@ from flask import got_request_exception
 app = Flask(__name__)
 
 
+#--------------Honeycomb IN-LINE Config------------------
+FlaskInstrumentor().instrument_app(app)
+RequestsInstrumentor().instrument()
+#---------------------------------------------------------
+
+
 # -------------AWS-X Ray IN-LINE Config-------------------
 xray_recorder.configure(service='Backend-Flask', dynamic_naming=xray_url)
 XRayMiddleware(app, xray_recorder)
@@ -71,6 +100,7 @@ def after_request(response):
     return response
 # ----------------------------------------------------------
 
+
 #--------------Rollbar IN-LINE Config---------------------------
 rollbar_access_token = os.getenv('ROLLBAR_ACCESS_TOKEN')
 @app.before_first_request
@@ -94,6 +124,7 @@ def rollbar_test():
     rollbar.report_message('Hello World!', 'warning')
     return "Hello World!"
 #--------------------------------------------------------
+
 
 @app.route("/api/message_groups", methods=['GET'])
 def data_message_groups():
