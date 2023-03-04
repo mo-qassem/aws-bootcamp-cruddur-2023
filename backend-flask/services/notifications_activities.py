@@ -1,6 +1,12 @@
+# ------------- Start AWS-X Ray Global-Config -------------------
+from aws_xray_sdk.core import xray_recorder
+# ------------- End AWS-X Ray Global-Config -------------------
 from datetime import datetime, timedelta, timezone
 class NotificationsActivities:
   def run():
+    # ------------- Start AWS-X Ray In App-code Config -------------------
+    subsegment = xray_recorder.begin_subsegment('notifications_activities')
+    # ------------- End AWS-X Ray In App-code Config ---------------------
     now = datetime.now(timezone.utc).astimezone()
     results = [{
       'uuid': '68f126b0-1ceb-4a33-88be-d90fa7109eee',
@@ -21,6 +27,13 @@ class NotificationsActivities:
         'reposts_count': 10,
         'created_at': (now - timedelta(days=2)).isoformat()
       }],
-    }
+    }  
     ]
+    # ------------- Start AWS-X Ray In App-code Config -------------------
+    dict = {
+      'now': now.isoformat()
+    }
+    subsegment.put_metadata('key', dict, 'namespace')
+    xray_recorder.end_subsegment()
+    # ------------- End AWS-X Ray In App-code Config ---------------------
     return results
