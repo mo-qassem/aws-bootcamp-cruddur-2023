@@ -1,5 +1,6 @@
 flask
 flask-cors
+watchtower
 aws-xray-sdk
 opentelemetry-api
 opentelemetry-sdk

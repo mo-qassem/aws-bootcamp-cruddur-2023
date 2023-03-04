@@ -1,12 +1,20 @@
-# ------------- Start AWS-X Ray Global-Config -------------------
+# -------------AWS-X Ray Global-Config-------------------
 from aws_xray_sdk.core import xray_recorder
-# ------------- End AWS-X Ray Global-Config -------------------
+# ---------------------------------------------------------
+
 from datetime import datetime, timedelta, timezone
 class NotificationsActivities:
-  def run():
-    # ------------- Start AWS-X Ray In App-code Config -------------------
+
+    # -------------CloudWatch IN-LINE Config-------------------
+  def run(Logger):
+    logger.info(NotificationsActivities)
+    # ---------------------------------------------------------
+
+
+    # -------------AWS-X Ray IN-LINE Config-------------------
     subsegment = xray_recorder.begin_subsegment('notifications_activities')
-    # ------------- End AWS-X Ray In App-code Config ---------------------
+    # ---------------------------------------------------------
+
     now = datetime.now(timezone.utc).astimezone()
     results = [{
       'uuid': '68f126b0-1ceb-4a33-88be-d90fa7109eee',
@@ -29,12 +37,12 @@ class NotificationsActivities:
       }],
     }  
     ]
-    # ------------- Start AWS-X Ray In App-code Config -------------------
+    # -------------AWS-X Ray IN-LINE Config-------------------
     dict = {
       'now': now.isoformat(),
       'results-size': results[0].values()
     }
     subsegment.put_metadata('key', dict, 'namespace')
     xray_recorder.end_subsegment()
-    # ------------- End AWS-X Ray In App-code Config ---------------------
+    # ---------------------------------------------------------
     return results
