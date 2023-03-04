@@ -555,3 +555,4 @@
   ![cloud-deployment](/journal/screenshots/week1_cloud_deploy_notif.png)
 
   ![cloud-deployment](/journal/screenshots/week1_cloud_deploy_console.png)
+  :relieved:
