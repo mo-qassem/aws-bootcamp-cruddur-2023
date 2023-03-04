@@ -4,10 +4,9 @@ from aws_xray_sdk.core import xray_recorder
 
 from datetime import datetime, timedelta, timezone
 class NotificationsActivities:
-
     # -------------CloudWatch IN-LINE Config-------------------
   def run(Logger):
-    logger.info(NotificationsActivities)
+    Logger.info('Hello CloudWatch! from  /api/activities/notifications')
     # ---------------------------------------------------------
 
 

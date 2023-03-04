@@ -4,7 +4,10 @@ from aws_xray_sdk.core import xray_recorder
 
 from datetime import datetime, timedelta, timezone
 class HomeActivities:
-  def run():
+   # -------------CloudWatch IN-LINE Config-------------------
+  def run(Logger):
+    Logger.info('Hello CloudWatch! from  /api/activities/home')
+    # ---------------------------------------------------------
 
     # -------------AWS-X Ray IN-LINE Config-------------------
     subsegment = xray_recorder.begin_subsegment('home_activities')
