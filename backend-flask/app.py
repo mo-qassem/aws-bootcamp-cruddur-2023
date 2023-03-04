@@ -14,7 +14,22 @@ from services.messages import *
 from services.create_message import *
 from services.show_activity import *
 
+# ------------- Start AWS-X Ray Global-Config -------------------
+from aws_xray_sdk.core import xray_recorder
+from aws_xray_sdk.ext.flask.middleware import XRayMiddleware
+xray_url = os.getenv("AWS_XRAY_URL")
+# ------------- End AWS-X Ray Global-Config -------------------
+
+
 app = Flask(__name__)
+
+
+# ------------- Start AWS-X Ray In App-code Config -------------------
+xray_recorder.configure(service='Backend-Flask', dynamic_naming=xray_url)
+XRayMiddleware(app, xray_recorder)
+# ------------- End AWS-X Ray In App-code Config ---------------------
+
+
 frontend = os.getenv('FRONTEND_URL')
 backend = os.getenv('BACKEND_URL')
 origins = [frontend, backend]
