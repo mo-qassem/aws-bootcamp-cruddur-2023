@@ -21,7 +21,7 @@ The `/journal` directory contains
 | ---------------------------- | --------------------------------------------------- | ------------------ |
 | [Week 0](journal/week0.md)   | Billing and Architecture                            | :heavy_check_mark: |
 | [Week 1](journal/week1.md)   | App Containerization                                | :heavy_check_mark: |
-| [Week 2](journal/week2.md)   | Distributed Tracing                                 |
+| [Week 2](journal/week2.md)   | Distributed Tracing                                 | heavy_check_mark:  |
 | [Week 3](journal/week3.md)   | Decentralized Authentication                        |                    |
 | [Week 4](journal/week4.md)   | Postgres and RDS                                    |                    |
 | [Week 5](journal/week5.md)   | DynamoDB and Serverless Caching                     |                    |
