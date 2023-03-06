@@ -2,10 +2,12 @@
 
 ### Homework Tasks
 
-- [x] Instrument Honeycomb with OTEL.
-- [x] Instrument AWS X-Ray.
-- [x] Configure custom logger to send to CloudWatch Logs.
-- [x] Integrate Rollbar and capture and error.
+| TASKs                                               | COMPLETED          |
+| --------------------------------------------------- | ------------------ |
+| Instrument Honeycomb with OTEL.                     | :heavy_check_mark: |
+| Instrument AWS X-Ray.                               | :heavy_check_mark: |
+| Configure custom logger to send to CloudWatch Logs. | :heavy_check_mark: |
+| Integrate Rollbar and capture and error.            | :heavy_check_mark: |
 
 ---
 
@@ -317,39 +319,12 @@
 
 ### Homework Challenges
 
-- [ ] Instrument Honeycomb for the frontend-application to observe network latency between frontend and backend[HARD].
-- [ ] Add custom instrumentation to Honeycomb to add more attributes eg. UserId, Add a custom span.
-- [ ] Run custom queries in Honeycomb and save them later eg. Latency by UserID, Recent Traces
-      .
+| TASKs                                                                                                            | COMPLETED                |
+| ---------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| Instrument Honeycomb for the frontend-application to observe network latency between frontend and backend[HARD]. | :heavy_exclamation_mark: |
+| Add custom instrumentation to Honeycomb to add more attributes eg. UserId, Add a custom span.                    | :heavy_exclamation_mark: |
+| Run custom queries in Honeycomb and save them later eg. Latency by UserID, Recent Traces.                        | :heavy_exclamation_mark: |
 
 ---
 
-## In Progress ...
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```
+- ### Instrument Honeycomb for the frontend-application to observe network latency between frontend and backend.
