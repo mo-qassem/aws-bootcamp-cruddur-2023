@@ -2,7 +2,7 @@
 
 ### Homework Tasks
 
-| TASKs                                               | COMPLETED          |
+| TASKS                                               | COMPLETED          |
 | --------------------------------------------------- | ------------------ |
 | Instrument Honeycomb with OTEL.                     | :heavy_check_mark: |
 | Instrument AWS X-Ray.                               | :heavy_check_mark: |
@@ -319,7 +319,7 @@
 
 ### Homework Challenges
 
-| TASKs                                                                                                            | COMPLETED                |
+| TASKS                                                                                                            | COMPLETED                |
 | ---------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | Instrument Honeycomb for the frontend-application to observe network latency between frontend and backend[HARD]. | :heavy_exclamation_mark: |
 | Add custom instrumentation to Honeycomb to add more attributes eg. UserId, Add a custom span.                    | :heavy_exclamation_mark: |
