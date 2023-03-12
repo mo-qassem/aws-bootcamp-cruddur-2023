@@ -1,4 +1,19 @@
 import './App.css';
+import HomeFeedPage from './pages/HomeFeedPage';
+import UserFeedPage from './pages/UserFeedPage';
+import NotificationsFeedPage from './pages/NotificationsFeedPage';
+import SignupPage from './pages/SignupPage';
+import SigninPage from './pages/SigninPage';
+import RecoverPage from './pages/RecoverPage';
+import MessageGroupsPage from './pages/MessageGroupsPage';
+import MessageGroupPage from './pages/MessageGroupPage';
+import ConfirmationPage from './pages/ConfirmationPage';
+import React from 'react';
+import {
+  createBrowserRouter,
+  RouterProvider
+} from "react-router-dom";
+
 //----------------Amplify Global Config----------------------
 import { Amplify } from 'aws-amplify';
 Amplify.configure({
@@ -16,20 +31,6 @@ Amplify.configure({
   }
 });
 //----------------------------------------------------------
-import HomeFeedPage from './pages/HomeFeedPage';
-import UserFeedPage from './pages/UserFeedPage';
-import NotificationsFeedPage from './pages/NotificationsFeedPage';
-import SignupPage from './pages/SignupPage';
-import SigninPage from './pages/SigninPage';
-import RecoverPage from './pages/RecoverPage';
-import MessageGroupsPage from './pages/MessageGroupsPage';
-import MessageGroupPage from './pages/MessageGroupPage';
-import ConfirmationPage from './pages/ConfirmationPage';
-import React from 'react';
-import {
-  createBrowserRouter,
-  RouterProvider
-} from "react-router-dom";
 
 const router = createBrowserRouter([
   {
