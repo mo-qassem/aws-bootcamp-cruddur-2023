@@ -2,12 +2,12 @@ version: "3.8"
 services:
   cruddur-backend-flask:
     environment:
-      FRONTEND_URL: "https://3000-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
-      BACKEND_URL: "https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
+      FRONTEND_URL: "http://localhost:3000"
+      BACKEND_URL: "http://localhost:4567"
       OTEL_EXPORTER_OTLP_ENDPOINT: "https://api.honeycomb.io"
       OTEL_EXPORTER_OTLP_HEADERS: "x-honeycomb-team=${HONEYCOMB_API_KEY}"
       OTEL_SERVICE_NAME: "${HONEYCOMB_SERVICE_NAME}"
-      AWS_XRAY_URL: "*4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}*"
+      AWS_XRAY_URL: "http://localhost:4567"
       AWS_XRAY_DAEMON_ADDRESS: "xray-daemon:2000"
       AWS_DEFAULT_REGION: "${AWS_DEFAULT_REGION}"
       AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
@@ -26,7 +26,7 @@ services:
       start_period: 30s
   cruddur-frontend-reactjs:
     environment:
-      REACT_APP_BACKEND_URL: "https://4567-${GITPOD_WORKSPACE_ID}.${GITPOD_WORKSPACE_CLUSTER_HOST}"
+      REACT_APP_BACKEND_URL: "http://localhost:4567"
       REACT_APP_AWS_PROJECT_REGION: "${AWS_DEFAULT_REGION}"
       REACT_APP_AWS_COGNITO_REGION: "${AWS_DEFAULT_REGION}"
       REACT_APP_AWS_USER_POOLS_ID: "us-east-1_6xWpKO82S"
@@ -62,7 +62,7 @@ services:
     environment:
       AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
       AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
-      AWS_REGION: "${AWS_REGION}"
+      AWS_REGION: "${AWS_DEFAULT_REGION}"
     command:
       - "xray -o -b xray-daemon:2000"
     ports:

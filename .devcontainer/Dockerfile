@@ -69,7 +69,7 @@ RUN curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc|sudo gpg --dea
     && sudo apt update \
     && sudo apt install -y postgresql-client-13 libpq-dev
 
-# Set up user bootcamp
+# Set up user cruddur
 ARG USERNAME=cruddur
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
