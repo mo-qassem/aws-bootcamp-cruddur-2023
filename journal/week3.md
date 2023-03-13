@@ -450,13 +450,13 @@ Checkbox for below Required Attributes:
 
 ### Homework Challenges
 
-| TASKS                                                                                                                                                               | COMPLETED          |
-| ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| [Medium] ree                                                                                                                                                        | :heavy_check_mark: |
-| [Hard] Decouple the JWT verify by implementing a Container Sidecar pattern using AWS’s official Aws-jwt-verify.js library.                                          | :heavy_check_mark: |
-| [Hard] Decouple the JWT verify process by using Envoy as a sidecar https://www.envoyproxy.io/.                                                                      | :heavy_check_mark: |
-| [Hard] Implement a IdP login eg. Login with Amazon or Facebook or Apple.                                                                                            | :heavy_check_mark: |
-| [Easy] Implement MFA that send an SMS (text message), warning this has spend, investigate spend before considering, text messages are not eligible for AWS Credits. | :heavy_check_mark: |
+| TASKS                                                                                                                                                               | COMPLETED                |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| [Medium] Decouple the JWT verify from the application code by writing a Flask Middleware                                                                            | :heavy_exclamation_mark: |
+| [Hard] Decouple the JWT verify by implementing a Container Sidecar pattern using AWS’s official Aws-jwt-verify.js library.                                          | :heavy_exclamation_mark: |
+| [Hard] Decouple the JWT verify process by using Envoy as a sidecar https://www.envoyproxy.io/.                                                                      | :heavy_exclamation_mark: |
+| [Hard] Implement a IdP login eg. Login with Amazon or Facebook or Apple.                                                                                            | :heavy_exclamation_mark: |
+| [Easy] Implement MFA that send an SMS (text message), warning this has spend, investigate spend before considering, text messages are not eligible for AWS Credits. | :heavy_exclamation_mark: |
 
 ```
 
