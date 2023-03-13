@@ -2,8 +2,11 @@ from flask import Flask
 from flask import request
 from flask_cors import CORS, cross_origin
 import os
-
 import sys
+
+#-------Verify JWT from our own lib------
+from lib.cognito_jwt_verification import CognitoJwtVerification, extract_access_token, TokenVerifyError
+#----------------------------------------------
 
 from services.home_activities import *
 from services.notifications_activities import *
@@ -70,6 +73,13 @@ from flask import got_request_exception
 
 app = Flask(__name__)
 
+#-------Verify JWT from our own lib------
+cognito_jwt_verification = CognitoJwtVerification.new(
+user_pool_id=os.getenv("AWS_USER_POOLS_ID"),
+user_pool_client_id=os.getenv("AWS_APP_CLIENT_ID"), 
+region=os.getenv("AWS_DEFAULT_REGION")
+)
+#--------------------------------------------
 
 #--------------Honeycomb IN-LINE Config------------------
 FlaskInstrumentor().instrument_app(app)
@@ -165,6 +175,17 @@ def data_create_message():
 
 @app.route("/api/activities/home", methods=['GET'])
 def data_home():
+  access_token = extract_access_token(request.headers)
+  try:
+#------------Authenticated Request-----------
+    claims = cognito_jwt_verification.verify(access_token)
+    app.logger.debug('Authenticated Request')
+    app.logger.debug(claims['username'])
+    data = HomeActivities.run(cognito_user_id=claims['username'], Logger=LOGGER )
+#------------Un-Authenticated Request-----------
+  except TokenVerifyError as e:
+        app.logger.debug('Un-Authenticated Request')
+        data = HomeActivities.run(Logger=LOGGER)
 #---------------retrive jwt header from frontend-------------
   app.logger.debug('Authorization HEADER')
   app.logger.debug(

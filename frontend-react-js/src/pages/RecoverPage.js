@@ -2,8 +2,9 @@ import './RecoverPage.css';
 import React from "react";
 import { ReactComponent as Logo } from '../components/svg/logo.svg';
 import { Link } from "react-router-dom";
-
+//------------------[TODO] Authenication------------
 import { Auth } from 'aws-amplify';
+//-------------------------------------------------
 
 export default function RecoverPage() {
   // Username is Eamil
@@ -13,7 +14,7 @@ export default function RecoverPage() {
   const [code, setCode] = React.useState('');
   const [errors, setErrors] = React.useState('');
   const [formState, setFormState] = React.useState('send_code');
-
+  //-----------------update-------------------------
   const onsubmit_send_code = async (event) => {
     event.preventDefault();
     setErrors('')
@@ -34,7 +35,7 @@ export default function RecoverPage() {
     }
     return false
   }
-
+  //-------------------------------------------------------
   const username_onchange = (event) => {
     setUsername(event.target.value);
   }

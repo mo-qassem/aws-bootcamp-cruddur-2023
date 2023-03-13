@@ -1,11 +1,14 @@
 import './ConfirmationPage.css';
 import React from "react";
 import { useParams } from 'react-router-dom';
-import {ReactComponent as Logo} from '../components/svg/logo.svg';
+import { ReactComponent as Logo } from '../components/svg/logo.svg';
 
-// [TODO] Authenication
+//-------------[TODO] Authenication-------------
 import { Auth } from 'aws-amplify';
-
+//----------------------------------------------
+//-------Implement fill-in email-----------------
+import { useLocation } from 'react-router-dom';
+//----------------------------------------------
 export default function ConfirmationPage() {
   const [email, setEmail] = React.useState('');
   const [code, setCode] = React.useState('');
@@ -20,7 +23,7 @@ export default function ConfirmationPage() {
   const email_onchange = (event) => {
     setEmail(event.target.value);
   }
-
+  //---------------------update----------------
   const resend_code = async (event) => {
     setErrors('')
     try {
@@ -32,14 +35,14 @@ export default function ConfirmationPage() {
       // does cognito always return english
       // for this to be an okay match?
       console.log(err)
-      if (err.message == 'Username cannot be empty'){
-        setErrors("You need to provide an email in order to send Resend Activiation Code")   
-      } else if (err.message == "Username/client id combination not found."){
-        setErrors("Email is invalid or cannot be found.")   
+      if (err.message == 'Username cannot be empty') {
+        setErrors("You need to provide an email in order to send Resend Activiation Code")
+      } else if (err.message == "Username/client id combination not found.") {
+        setErrors("Email is invalid or cannot be found.")
       }
     }
   }
-
+  //---------------------update----------------
   const onsubmit = async (event) => {
     event.preventDefault();
     setErrors('')
@@ -51,21 +54,33 @@ export default function ConfirmationPage() {
     }
     return false
   }
+  //---------------------------------------------
 
+  //-------Implement fill-in email-----------------
+  const location = useLocation();
+  React.useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const emailParam = searchParams.get('email');
+    if (emailParam) {
+      setEmail(emailParam);
+    }
+  },
+    [location]);
+  //-------------------------------------------------
   let el_errors;
-  if (errors){
+  if (errors) {
     el_errors = <div className='errors'>{errors}</div>;
   }
 
 
   let code_button;
-  if (codeSent){
+  if (codeSent) {
     code_button = <div className="sent-message">A new activation code has been sent to your email</div>
   } else {
     code_button = <button className="resend" onClick={resend_code}>Resend Activation Code</button>;
   }
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
     if (params.email) {
       setEmail(params.email)
     }
@@ -88,7 +103,7 @@ export default function ConfirmationPage() {
               <input
                 type="text"
                 value={email}
-                onChange={email_onchange} 
+                onChange={email_onchange}
               />
             </div>
             <div className='field text_field code'>
@@ -96,7 +111,7 @@ export default function ConfirmationPage() {
               <input
                 type="text"
                 value={code}
-                onChange={code_onchange} 
+                onChange={code_onchange}
               />
             </div>
           </div>

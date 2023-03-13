@@ -9,7 +9,7 @@ tracer = trace.get_tracer("home.activities")
 
 from datetime import datetime, timedelta, timezone
 class HomeActivities:
-  def run(Logger):
+  def run(cognito_user_id=None, Logger):
     #--------------Honeycomb IN-LINE Config-------------------
     with tracer.start_as_current_span("HomeActivities-MockData"): 
       span = trace.get_current_span()
@@ -71,7 +71,17 @@ class HomeActivities:
     subsegment.put_metadata('key', dict, 'namespace')
     xray_recorder.end_subsegment()
     # ---------------------------------------------------------
-
+    if cognito_user_id != None:
+          extra_crud = {
+      'uuid': '248959df-3079-4947-b847-9e0892d1bab4',
+      'handle':  'Garek',
+      'message': 'My dear doctor, I am just simple tailor',
+      'created_at': (now - timedelta(hours=1)).isoformat(),
+      'expires_at': (now + timedelta(hours=12)).isoformat(),
+      'likes': 10,
+      'replies': []
+    }
+    results.insert(0,extra_crud)
     #--------------Honeycomb IN-LINE Config-------------------
     span.set_attribute("home-activities-app.result_length", len(results))
     #----------------------------------------------------------
