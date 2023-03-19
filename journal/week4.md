@@ -294,7 +294,7 @@
     return json[0]
   ```
 
-  ![sql_home](/journal/screenshots/week4_update_home_using sqlfetch.png)
+  ![sql_home](/journal/screenshots/week4_home_using_sqlfetch.png)
 
 ## 04. Connect `local Dev-Env Public Ip` to RDS Instance.
 
