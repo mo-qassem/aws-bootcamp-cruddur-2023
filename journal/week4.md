@@ -225,7 +225,7 @@
   psycopg[pool]
   ```
 
-- ### Create two functions under `backend-flask/lib/db.py` to return raw json data from database.
+- ### Create two functions under `backend-flask/lib/db.py` to create `Connection Pool` and return raw json data from database.
 
   ```python
   from psycopg_pool import ConnectionPool
@@ -257,7 +257,7 @@
   CONNECTION_URL: "${DEV_CONNECTION_URL}"
   ```
 
-- ### Update `home_activities.py` main function to load mock data from local PostgreSQL DB.
+- ### Update `home_activities.py` main function to load mock data from local PostgreSQL DB or real data from API call.
 
   ```python
   #---------COnfigure postgres pool-----------------
@@ -293,3 +293,51 @@
         #json = cur.fetchall()
     return json[0]
   ```
+
+## 04. Connect `local Dev-Env Public Ip` to RDS Instance.
+
+- ### Export below env-vars
+  ```shell
+  local_DevEnv_PublicIp=$(curl ifconfig.me.)
+  DB_SG_ID=sg-001751bca040b1d2b
+  DB_SG_RULE_ID=sgr-00e47810964b08426
+  ```
+- ### Update RDS SG using below CMD using AWS-CLI
+
+  ```shell
+  aws ec2 modify-security-group-rules \
+      --group-id $DB_SG_ID \
+      --security-group-rules "SecurityGroupRuleId=$DB_SG_RULE_ID,SecurityGroupRule={Description=local_DevEnv,IpProtocol=tcp,FromPort=5432,ToPort=5432,CidrIpv4=$local_DevEnv_PublicIp/32}"
+  ```
+
+- ### Create `rds_update_sg` script to automate the update each time start Dev-Container Envirment
+
+  .
+
+  ```shell
+  #!/usr/bin/bash
+  set -e
+  CYAN='\033[1;36m'
+  NO_COLOR='\033[0m'
+  LABEL='UPDATE AWS-RDS SECUIRTY GROUP RULE'
+  printf "${CYAN}==== ${LABEL} ====${NO_COLOR}\n"
+
+  CYAN='\033[0;31m'
+  NO_COLOR='\033[0m'
+  LABEL='GETTING PUBLIC IP ADDRESS'
+  printf "${CYAN}--- ${LABEL} ---${NO_COLOR}\n"
+  source /workspaces/aws-bootcamp-cruddur-2023/.devcontainer/.env
+  echo ""
+  echo "Public-IP: $local_DevEnv_PublicIp"
+  echo""
+
+  aws ec2 modify-security-group-rules \
+        --group-id $DB_SG_ID \
+        --security-group-rules "SecurityGroupRuleId=$DB_SG_RULE_ID,SecurityGroupRule={Description=local_DevEnv,IpProtocol=tcp,FromPort=5432,ToPort=5432,CidrIpv4=$local_DevEnv_PublicIp/32}"
+  ```
+
+- ### Update `devcontainer.json` to run `rds_update_sg` each time start Dev-Container Envirment
+
+```json
+  "postAttachCommand": "cd ./frontend-react-js && npm install && cd ../backend-flask && pip install -r requirements.txt --no-warn-script-location && export PATH='/home/cruddur/.local/bin:$PATH' && /usr/bin/chmod u+x /workspaces/aws-bootcamp-cruddur-2023/backend-flask/bin/* && /usr/bin/bash /workspaces/aws-bootcamp-cruddur-2023/backend-flask/bin/rds_update_sg "
+```

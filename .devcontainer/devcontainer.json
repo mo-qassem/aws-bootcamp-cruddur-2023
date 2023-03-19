@@ -44,15 +44,15 @@
     },
     "vscode": {
       "extensions": [
-		"42Crunch.vscode-openapi",
-		"ms-azuretools.vscode-docker",
-		"ms-python.python",
-		"hashicorp.terraform",
-		"redhat.ansible",
-		"redhat.vscode-yaml",
-		"amazonwebservices.aws-toolkit-vscode",
-		"cweijan.vscode-postgresql-client2"
-	]
+        "42Crunch.vscode-openapi",
+        "ms-azuretools.vscode-docker",
+        "ms-python.python",
+        "hashicorp.terraform",
+        "redhat.ansible",
+        "redhat.vscode-yaml",
+        "amazonwebservices.aws-toolkit-vscode",
+        "cweijan.vscode-postgresql-client2"
+      ]
     }
   },
   /*
@@ -68,7 +68,8 @@
     "ROLLBAR_ACCESS_TOKEN": "${localEnv:ROLLBAR_ACCESS_TOKEN}"
   },
 */
+
   "remoteUser": "cruddur",
 
-  "postAttachCommand": "cd ./frontend-react-js && npm install && cd ../backend-flask && pip install -r requirements.txt --no-warn-script-location && export PATH='/home/cruddur/.local/bin:$PATH' && /usr/bin/chmod u+x /workspaces/aws-bootcamp-cruddur-2023/backend-flask/bin/* "
+  "postAttachCommand": "cd ./frontend-react-js && npm install && cd ../backend-flask && pip install -r requirements.txt --no-warn-script-location && export PATH='/home/cruddur/.local/bin:$PATH' && /usr/bin/chmod u+x /workspaces/aws-bootcamp-cruddur-2023/backend-flask/bin/* && /usr/bin/bash /workspaces/aws-bootcamp-cruddur-2023/backend-flask/bin/rds_update_sg "
 }
