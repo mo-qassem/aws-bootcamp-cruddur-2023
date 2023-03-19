@@ -17,13 +17,13 @@ At the start of the bootcamp you need to create a new Github Repository from thi
 
 The `/journal` directory contains
 
-| TASKS                        | TOPICS                                              | Homework Tasks     | Homework Challenges      |
-| ---------------------------- | --------------------------------------------------- | ------------------ | ------------------------ |
-| [Week 0](journal/week0.md)   | Billing and Architecture                            | :heavy_check_mark: | :heavy_check_mark:       |
-| [Week 1](journal/week1.md)   | App Containerization                                | :heavy_check_mark: | :heavy_check_mark:       |
-| [Week 2](journal/week2.md)   | Distributed Tracing                                 | :heavy_check_mark: | :heavy_exclamation_mark: |
-| [Week 3](journal/week3.md)   | Decentralized Authentication                        | :heavy_check_mark: | :heavy_exclamation_mark: |
-| [Week 4](journal/week4.md)   | Postgres and RDS                                    |                    |
+| TASKS                        | TOPICS                                              | Homework Tasks     | Homework Challenges |
+| ---------------------------- | --------------------------------------------------- | ------------------ | ------------------- |
+| [Week 0](journal/week0.md)   | Billing and Architecture                            | :heavy_check_mark: | :heavy_check_mark:  |
+| [Week 1](journal/week1.md)   | App Containerization                                | :heavy_check_mark: | :heavy_check_mark:  |
+| [Week 2](journal/week2.md)   | Distributed Tracing                                 | :heavy_check_mark: | :construction:      |
+| [Week 3](journal/week3.md)   | Decentralized Authentication                        | :heavy_check_mark: | :construction:      |
+| [Week 4](journal/week4.md)   | Postgres and RDS                                    | :heavy_check_mark: | -                   |
 | [Week 5](journal/week5.md)   | DynamoDB and Serverless Caching                     |                    |
 | [Week 6](journal/week6.md)   | Deploying Containers                                |                    |
 | [Week 7](journal/week7.md)   | Solving CORS with a Load Balancer and Custom Domain |                    |

@@ -6,7 +6,7 @@ NO_COLOR='\033[0m'
 LABEL='DATABASE SCHEMA LOAD'
 printf "${CYAN}== ${LABEL} ==${NO_COLOR}\n"
 
-if [ $1 = 'prod' ];
+if [ "$1" = "prod" ];
 then
     echo "USING PRODUCATION"
     CON_URL=$PROD_CONNECTION_URL

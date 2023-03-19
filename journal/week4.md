@@ -122,7 +122,53 @@
     psql $CON_URL < $seed_path
     ```
 
-- ### Create below sql files under `backend-flask/db/`
+  - `db_sessions`
+
+    ```shell
+    #!/usr/bin/bash
+    CYAN='\033[1;36m'
+    NO_COLOR='\033[0m'
+    LABEL='DATABASE SESSIONS'
+    printf "${CYAN}== ${LABEL} ==${NO_COLOR}\n"
+
+    if [ $1 = 'prod' ];
+    then
+        echo "USING PRODUCATION"
+        URL=$PROD_CONNECTION_URL
+    else
+        echo "USING LOCAL DEV"
+        URL=$CONNECTION_URL
+    fi
+
+    NO_DBN_CONNECTION_URL=$(sed 's/\/cruddur//g' <<<"$URL")
+    psql $NO_DBN_CONNECTION_URL -c "select pid as process_id, \
+        usename as user,  \
+        datname as db, \
+        client_addr, \
+        application_name as app,\
+        state \
+    from pg_stat_activity;"
+    ```
+
+  - `db_setup`
+
+    ```shell
+    #!/usr/bin/bash
+    set -e
+    CYAN='\033[1;36m'
+    NO_COLOR='\033[0m'
+    LABEL='DATABASE SETUP'
+    printf "${CYAN}==== ${LABEL} ====${NO_COLOR}\n"
+
+    bin_path=/workspaces/aws-bootcamp-cruddur-2023/backend-flask/bin/
+
+    source "$bin_path/db_drop"
+    source "$bin_path/db_create"
+    source "$bin_path/db_schema_load"
+    source "$bin_path/db_seed"
+    ```
+
+- ### Create below `SQL` files under `backend-flask/db/`
 
   - `schema.sql`
 
@@ -169,3 +215,81 @@
         current_timestamp + interval '10 day'
     )
     ```
+
+## 03. Install Postgres Driver in Backend Application.
+
+- ### Add below python libraries to `requirements.txt` and install them.
+
+  ```shell
+  psycopg[binary]
+  psycopg[pool]
+  ```
+
+- ### Create two functions under `backend-flask/lib/db.py` to return raw json data from database.
+
+  ```python
+  from psycopg_pool import ConnectionPool
+  import os
+
+  def query_wrap_object(template):
+    sql = f"""
+    (SELECT COALESCE(row_to_json(object_row),'{{}}'::json) FROM (
+    {template}
+    ) object_row);
+    """
+    return sql
+
+  def query_wrap_array(template):
+    sql = f"""
+    (SELECT COALESCE(array_to_json(array_agg(row_to_json(array_row))),'[]'::json) FROM (
+    {template}
+    ) array_row);
+    """
+    return sql
+
+  connection_url = os.getenv("CONNECTION_URL")
+  pool = ConnectionPool(connection_url)
+  ```
+
+- ### Update and add env-vars for `cruddur-backend-flask` service in `docker-compose.yaml`
+
+  ```yaml
+  CONNECTION_URL: "${DEV_CONNECTION_URL}"
+  ```
+
+- ### Update `home_activities.py` main function to load mock data from local PostgreSQL DB.
+
+  ```python
+  #---------COnfigure postgres pool-----------------
+  from lib.db import pool, query_wrap_array
+  ```
+
+  ```python
+  class HomeActivities:
+  def run(Logger, cognito_user_id=None):
+  #----------------Fetch Data from Postgres DB----------------
+    sql = query_wrap_array("""
+      SELECT
+        activities.uuid,
+        users.display_name,
+        users.handle,
+        activities.message,
+        activities.replies_count,
+        activities.reposts_count,
+        activities.likes_count,
+        activities.reply_to_activity_uuid,
+        activities.expires_at,
+        activities.created_at
+      FROM public.activities
+      LEFT JOIN public.users ON users.uuid = activities.user_uuid
+      ORDER BY activities.created_at DESC
+      """)
+    with pool.connection() as conn:
+      with conn.cursor() as cur:
+        cur.execute(sql)
+        # this will return a tuple
+        # the first field being the data
+        json = cur.fetchone()
+        #json = cur.fetchall()
+    return json[0]
+  ```

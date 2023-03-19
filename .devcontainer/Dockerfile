@@ -36,7 +36,8 @@ RUN yes | unminimize \
     sudo \
     unzip \
     wget \
-    vim \     
+    vim \ 
+    lsof \
     && locale-gen en_US.UTF-8 \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
 ENV LANG=en_US.UTF-8

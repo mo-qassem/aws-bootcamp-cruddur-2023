@@ -10,5 +10,7 @@ opentelemetry-exporter-otlp-proto-http
 opentelemetry-instrumentation-flask
 opentelemetry-instrumentation-requests
 Flask-AWSCognito
+psycopg[binary]
+psycopg[pool]
 
 
