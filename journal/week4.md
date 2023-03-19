@@ -294,6 +294,8 @@
     return json[0]
   ```
 
+  ![sql_home](/journal/screenshots/week4_update_home_using sql_fetch.png)
+
 ## 04. Connect `local Dev-Env Public Ip` to RDS Instance.
 
 - ### Export below env-vars
@@ -310,9 +312,7 @@
       --security-group-rules "SecurityGroupRuleId=$DB_SG_RULE_ID,SecurityGroupRule={Description=local_DevEnv,IpProtocol=tcp,FromPort=5432,ToPort=5432,CidrIpv4=$local_DevEnv_PublicIp/32}"
   ```
 
-- ### Create `rds_update_sg` script to automate the update each time start Dev-Container Envirment
-
-  .
+- ### Create `rds_update_sg` script under `backend-flask/bin/` to automate the update each time start Dev-Container Envirment.
 
   ```shell
   #!/usr/bin/bash
