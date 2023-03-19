@@ -46,18 +46,36 @@
 - ### Create below scripts under `backend-flask/bin/`
 
   - `db_connect`
+
     ```shell
     #!/usr/bin/bash
-    psql $CONNECTION_URL
+
+    if [ "$1" = "prod" ];
+    then
+        RED='\033[0;31m'
+        NO_COLOR='\033[0m'
+        LABEL='USING PRODUCATION'
+        printf "${RED}--- ${LABEL} ---${NO_COLOR}\n"
+        URL=$PROD_CONNECTION_URL
+    else
+        CYAN='\033[1;36m'
+        NO_COLOR='\033[0m'
+        LABEL='USING LOCAL DEV'
+        printf "${CYAN}--- ${LABEL} ---${NO_COLOR}\n"
+        URL=$CONNECTION_URL
+    fi
+
+    psql $URL
     ```
+
   - `db_create`
 
     ```shell
     #!/usr/bin/bash
-    CYAN='\033[1;36m'
+    PURPLE='\033[0;35m'
     NO_COLOR='\033[0m'
     LABEL='CREATING DATABASE'
-    printf "${CYAN}== ${LABEL} ==${NO_COLOR}\n"
+    printf "${PURPLE}=== ${LABEL} ===${NO_COLOR}\n"
 
     NO_DBN_CONNECTION_URL=$(sed 's/\/cruddur//g' <<< $CONNECTION_URL)
     psql $NO_DBN_CONNECTION_URL -c 'CREATE DATABASE cruddur;'
@@ -67,10 +85,10 @@
 
     ```shell
     #!/usr/bin/bash
-    CYAN='\033[1;36m'
+    PURPLE='\033[0;35m'
     NO_COLOR='\033[0m'
     LABEL='DELETING DATABASE'
-    printf "${CYAN}== ${LABEL} ==${NO_COLOR}\n"
+    printf "${PURPLE}=== ${LABEL} ===${NO_COLOR}\n"
 
     NO_DBN_CONNECTION_URL=$(sed 's/\/cruddur//g' <<< $CONNECTION_URL)
     psql $NO_DBN_CONNECTION_URL -c 'DROP DATABASE cruddur;'
@@ -82,17 +100,23 @@
     #!/usr/bin/bash
     schema_path=/workspaces/aws-bootcamp-cruddur-2023/backend-flask/db/schema.sql
 
-    CYAN='\033[1;36m'
+    PURPLE='\033[0;35m'
     NO_COLOR='\033[0m'
     LABEL='DATABASE SCHEMA LOAD'
-    printf "${CYAN}== ${LABEL} ==${NO_COLOR}\n"
+    printf "${PURPLE}=== ${LABEL} ===${NO_COLOR}\n"
 
-    if [ $1 = 'prod' ];
+    if [ "$1" = "prod" ];
     then
-        echo "USING PRODUCATION"
+        RED='\033[0;31m'
+        NO_COLOR='\033[0m'
+        LABEL='USING PRODUCATION'
+        printf "${RED}--- ${LABEL} ---${NO_COLOR}\n"
         CON_URL=$PROD_CONNECTION_URL
     else
-        echo "USING LOCAL DEV"
+        CYAN='\033[1;36m'
+        NO_COLOR='\033[0m'
+        LABEL='USING LOCAL DEV'
+        printf "${CYAN}--- ${LABEL} ---${NO_COLOR}\n"
         CON_URL=$CONNECTION_URL
     fi
 
@@ -105,17 +129,23 @@
     #!/usr/bin/bash
     seed_path=/workspaces/aws-bootcamp-cruddur-2023/backend-flask/db/seed.sql
 
-    CYAN='\033[1;36m'
+    PURPLE='\033[0;35m'
     NO_COLOR='\033[0m'
     LABEL='DATABASE SEED'
-    printf "${CYAN}== ${LABEL} ==${NO_COLOR}\n"
+    printf "${PURPLE}=== ${LABEL} ===${NO_COLOR}\n"
 
-    if [ $1 = 'prod' ];
+    if [ "$1" = "prod" ];
     then
-        echo "USING PRODUCATION"
+        RED='\033[0;31m'
+        NO_COLOR='\033[0m'
+        LABEL='USING PRODUCATION'
+        printf "${RED}--- ${LABEL} ---${NO_COLOR}\n"
         CON_URL=$PROD_CONNECTION_URL
     else
-        echo "USING LOCAL DEV"
+        CYAN='\033[1;36m'
+        NO_COLOR='\033[0m'
+        LABEL='USING LOCAL DEV'
+        printf "${CYAN}--- ${LABEL} ---${NO_COLOR}\n"
         CON_URL=$CONNECTION_URL
     fi
 
@@ -126,27 +156,33 @@
 
     ```shell
     #!/usr/bin/bash
-    CYAN='\033[1;36m'
+    PURPLE='\033[0;35m'
     NO_COLOR='\033[0m'
     LABEL='DATABASE SESSIONS'
-    printf "${CYAN}== ${LABEL} ==${NO_COLOR}\n"
+    printf "${PURPLE}=== ${LABEL} ===${NO_COLOR}\n"
 
-    if [ $1 = 'prod' ];
+    if [ "$1" = "prod" ];
     then
-        echo "USING PRODUCATION"
+        RED='\033[0;31m'
+        NO_COLOR='\033[0m'
+        LABEL='USING PRODUCATION'
+        printf "${RED}--- ${LABEL} ---${NO_COLOR}\n"
         URL=$PROD_CONNECTION_URL
     else
-        echo "USING LOCAL DEV"
+        CYAN='\033[1;36m'
+        NO_COLOR='\033[0m'
+        LABEL='USING LOCAL DEV'
+        printf "${CYAN}--- ${LABEL} ---${NO_COLOR}\n"
         URL=$CONNECTION_URL
     fi
 
     NO_DBN_CONNECTION_URL=$(sed 's/\/cruddur//g' <<<"$URL")
     psql $NO_DBN_CONNECTION_URL -c "select pid as process_id, \
-        usename as user,  \
-        datname as db, \
-        client_addr, \
-        application_name as app,\
-        state \
+          usename as user,  \
+          datname as db, \
+          client_addr, \
+          application_name as app,\
+          state \
     from pg_stat_activity;"
     ```
 
@@ -155,10 +191,10 @@
     ```shell
     #!/usr/bin/bash
     set -e
-    CYAN='\033[1;36m'
+    PURPLE='\033[0;35m'
     NO_COLOR='\033[0m'
     LABEL='DATABASE SETUP'
-    printf "${CYAN}==== ${LABEL} ====${NO_COLOR}\n"
+    printf "${PURPLE}=== ${LABEL} ===${NO_COLOR}\n"
 
     bin_path=/workspaces/aws-bootcamp-cruddur-2023/backend-flask/bin/
 
@@ -317,10 +353,10 @@
   ```shell
   #!/usr/bin/bash
   set -e
-  CYAN='\033[1;36m'
+  PURPLE='\033[0;35m'
   NO_COLOR='\033[0m'
   LABEL='UPDATE AWS-RDS SECUIRTY GROUP RULE'
-  printf "${CYAN}==== ${LABEL} ====${NO_COLOR}\n"
+  printf "${PURPLE}=== ${LABEL} ===${NO_COLOR}\n"
 
   RED='\033[0;31m'
   NO_COLOR='\033[0m'

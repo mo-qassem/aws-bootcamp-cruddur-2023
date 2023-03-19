@@ -1,9 +1,9 @@
 #!/usr/bin/bash
 set -e
-CYAN='\033[1;36m'
+PURPLE='\033[0;35m'
 NO_COLOR='\033[0m'
 LABEL='DATABASE SETUP'
-printf "${CYAN}==== ${LABEL} ====${NO_COLOR}\n"
+printf "${PURPLE}=== ${LABEL} ===${NO_COLOR}\n"
 
 bin_path=/workspaces/aws-bootcamp-cruddur-2023/backend-flask/bin/
 

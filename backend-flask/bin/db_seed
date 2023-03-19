@@ -1,17 +1,23 @@
 #!/usr/bin/bash
 seed_path=/workspaces/aws-bootcamp-cruddur-2023/backend-flask/db/seed.sql
 
-CYAN='\033[1;36m'
+PURPLE='\033[0;35m'
 NO_COLOR='\033[0m'
 LABEL='DATABASE SEED'
-printf "${CYAN}== ${LABEL} ==${NO_COLOR}\n"
+printf "${PURPLE}=== ${LABEL} ===${NO_COLOR}\n"
 
 if [ "$1" = "prod" ];
 then
-    echo "USING PRODUCATION"
+    RED='\033[0;31m'
+    NO_COLOR='\033[0m'
+    LABEL='USING PRODUCATION'
+    printf "${RED}--- ${LABEL} ---${NO_COLOR}\n"
     CON_URL=$PROD_CONNECTION_URL
 else
-    echo "USING LOCAL DEV"
+    CYAN='\033[1;36m'
+    NO_COLOR='\033[0m'
+    LABEL='USING LOCAL DEV'
+    printf "${CYAN}--- ${LABEL} ---${NO_COLOR}\n"
     CON_URL=$CONNECTION_URL
 fi
 
