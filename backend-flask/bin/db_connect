@@ -1,2 +1,18 @@
 #!/usr/bin/bash
-psql $CONNECTION_URL
+
+if [ "$1" = "prod" ];
+then
+    RED='\033[0;31m'
+    NO_COLOR='\033[0m'
+    LABEL='USING PRODUCATION'
+    printf "${RED}--- ${LABEL} ---${NO_COLOR}\n"
+    URL=$PROD_CONNECTION_URL
+else
+    CYAN='\033[1;36m'
+    NO_COLOR='\033[0m'
+    LABEL='USING LOCAL DEV'
+    printf "${CYAN}--- ${LABEL} ---${NO_COLOR}\n"
+    URL=$CONNECTION_URL
+fi
+
+psql $URL

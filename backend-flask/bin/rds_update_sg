@@ -5,10 +5,10 @@ NO_COLOR='\033[0m'
 LABEL='UPDATE AWS-RDS SECUIRTY GROUP RULE'
 printf "${CYAN}==== ${LABEL} ====${NO_COLOR}\n"
 
-CYAN='\033[0;31m'
+RED='\033[0;31m'
 NO_COLOR='\033[0m'
 LABEL='GETTING PUBLIC IP ADDRESS'
-printf "${CYAN}--- ${LABEL} ---${NO_COLOR}\n"
+printf "${RED}--- ${LABEL} ---${NO_COLOR}\n"
 source /workspaces/aws-bootcamp-cruddur-2023/.devcontainer/.env
 echo ""
 echo "Public-IP: $local_DevEnv_PublicIp"

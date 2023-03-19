@@ -322,18 +322,18 @@
   LABEL='UPDATE AWS-RDS SECUIRTY GROUP RULE'
   printf "${CYAN}==== ${LABEL} ====${NO_COLOR}\n"
 
-  CYAN='\033[0;31m'
+  RED='\033[0;31m'
   NO_COLOR='\033[0m'
   LABEL='GETTING PUBLIC IP ADDRESS'
-  printf "${CYAN}--- ${LABEL} ---${NO_COLOR}\n"
+  printf "${RED}--- ${LABEL} ---${NO_COLOR}\n"
   source /workspaces/aws-bootcamp-cruddur-2023/.devcontainer/.env
   echo ""
   echo "Public-IP: $local_DevEnv_PublicIp"
   echo""
 
-  aws ec2 modify-security-group-rules \
+  /usr/local/bin/aws ec2 modify-security-group-rules \
         --group-id $DB_SG_ID \
-        --security-group-rules "SecurityGroupRuleId=$DB_SG_RULE_ID,SecurityGroupRule={Description=local_DevEnv,IpProtocol=tcp,FromPort=5432,ToPort=5432,CidrIpv4=$local_DevEnv_PublicIp/32}"
+        --security-group-rules "SecurityGroupRuleId=$DB_SG_RULE_ID,SecurityGroupRule={Description=DevEnv_PublicIP,IpProtocol=tcp,FromPort=5432,ToPort=5432,CidrIpv4=$local_DevEnv_PublicIp/32}" --no-paginate
   ```
 
 - ### Update `devcontainer.json` to run `rds_update_sg` each time start Dev-Container Envirment
