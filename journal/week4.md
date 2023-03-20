@@ -378,7 +378,7 @@
   "postAttachCommand": "cd ./frontend-react-js && npm install && cd ../backend-flask && pip install -r requirements.txt --no-warn-script-location && export PATH='/home/cruddur/.local/bin:$PATH' && /usr/bin/chmod u+x /workspaces/aws-bootcamp-cruddur-2023/backend-flask/bin/* && /usr/bin/bash /workspaces/aws-bootcamp-cruddur-2023/backend-flask/bin/rds_update_sg "
 ```
 
-## 05. Create Cognito Trigger to insert user into database.
+## 05. Create Cognito Trigger to insert user into database. [Commit](608b9f76c7c507d191986f21a3a0cb643c007210)
 
 - ### Update `schema.sql` and add additional attributes to `users` table
 
