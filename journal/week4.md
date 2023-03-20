@@ -8,7 +8,7 @@
 | Bash scripting for common database actions.          | :heavy_check_mark: |
 | Install Postgres Driver in Backend Application.      | :heavy_check_mark: |
 | Connect Gitpod to RDS Instance.                      | :heavy_check_mark: |
-| Create Congito Trigger to insert user into database. | :heavy_check_mark: |
+| Create Cognito Trigger to insert user into database. | :heavy_check_mark: |
 | Create new activities with a database insert.        | :heavy_check_mark: |
 
 ---
@@ -54,7 +54,7 @@
     then
         RED='\033[0;31m'
         NO_COLOR='\033[0m'
-        LABEL='USING PRODUCATION'
+        LABEL='USING PRODUCTION'
         printf "${RED}--- ${LABEL} ---${NO_COLOR}\n"
         URL=$PROD_CONNECTION_URL
     else
@@ -109,7 +109,7 @@
     then
         RED='\033[0;31m'
         NO_COLOR='\033[0m'
-        LABEL='USING PRODUCATION'
+        LABEL='USING PRODUCTION'
         printf "${RED}--- ${LABEL} ---${NO_COLOR}\n"
         CON_URL=$PROD_CONNECTION_URL
     else
@@ -138,7 +138,7 @@
     then
         RED='\033[0;31m'
         NO_COLOR='\033[0m'
-        LABEL='USING PRODUCATION'
+        LABEL='USING PRODUCTION'
         printf "${RED}--- ${LABEL} ---${NO_COLOR}\n"
         CON_URL=$PROD_CONNECTION_URL
     else
@@ -165,7 +165,7 @@
     then
         RED='\033[0;31m'
         NO_COLOR='\033[0m'
-        LABEL='USING PRODUCATION'
+        LABEL='USING PRODUCTION'
         printf "${RED}--- ${LABEL} ---${NO_COLOR}\n"
         URL=$PROD_CONNECTION_URL
     else
@@ -348,14 +348,14 @@
       --security-group-rules "SecurityGroupRuleId=$DB_SG_RULE_ID,SecurityGroupRule={Description=local_DevEnv,IpProtocol=tcp,FromPort=5432,ToPort=5432,CidrIpv4=$local_DevEnv_PublicIp/32}"
   ```
 
-- ### Create `rds_update_sg` script under `backend-flask/bin/` to automate the update each time start Dev-Container Envirment.
+- ### Create `rds_update_sg` script under `backend-flask/bin/` to automate the update each time start Dev-Container Environment.
 
   ```shell
   #!/usr/bin/bash
   set -e
   PURPLE='\033[0;35m'
   NO_COLOR='\033[0m'
-  LABEL='UPDATE AWS-RDS SECUIRTY GROUP RULE'
+  LABEL='UPDATE AWS-RDS SECURITY GROUP RULE'
   printf "${PURPLE}=== ${LABEL} ===${NO_COLOR}\n"
 
   RED='\033[0;31m'
@@ -372,8 +372,107 @@
         --security-group-rules "SecurityGroupRuleId=$DB_SG_RULE_ID,SecurityGroupRule={Description=DevEnv_PublicIP,IpProtocol=tcp,FromPort=5432,ToPort=5432,CidrIpv4=$local_DevEnv_PublicIp/32}" --no-paginate
   ```
 
-- ### Update `devcontainer.json` to run `rds_update_sg` each time start Dev-Container Envirment
+- ### Update `devcontainer.json` to run `rds_update_sg` each time start Dev-Container Environment
 
 ```json
   "postAttachCommand": "cd ./frontend-react-js && npm install && cd ../backend-flask && pip install -r requirements.txt --no-warn-script-location && export PATH='/home/cruddur/.local/bin:$PATH' && /usr/bin/chmod u+x /workspaces/aws-bootcamp-cruddur-2023/backend-flask/bin/* && /usr/bin/bash /workspaces/aws-bootcamp-cruddur-2023/backend-flask/bin/rds_update_sg "
 ```
+
+## 05. Create Cognito Trigger to insert user into database.
+
+- ### Update `schema.sql` and add additional attributes to `users` table
+
+```sql
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+DROP TABLE IF EXISTS public.users;
+DROP TABLE IF EXISTS public.activities;
+
+CREATE TABLE public.users (
+  uuid UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  display_name text NOT NULL,
+  handle text NOT NULL,
+  email text NOT NULL,
+  cognito_user_id text NOT NULL,
+  created_at TIMESTAMP default current_timestamp NOT NULL
+);
+
+CREATE TABLE public.activities (
+  uuid UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  user_uuid UUID NOT NULL,
+  message text NOT NULL,
+  replies_count integer DEFAULT 0,
+  reposts_count integer DEFAULT 0,
+  likes_count integer DEFAULT 0,
+  reply_to_activity_uuid integer,
+  expires_at TIMESTAMP,
+  created_at TIMESTAMP default current_timestamp NOT NULL
+);
+```
+
+- ### Create lambda function to be triggered by AWS Cognito and add user info to RDS-DB
+
+  - Update lambda execution role and add the permission for CreateNetworkInterface by adding inline policy include the below actions.
+    ```json
+    {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Effect": "Allow",
+          "Action": [
+            "ec2:DescribeNetworkInterfaces",
+            "ec2:CreateNetworkInterface",
+            "ec2:DeleteNetworkInterface",
+            "ec2:DescribeInstances",
+            "ec2:AttachNetworkInterface"
+          ],
+          "Resource": "*"
+        }
+      ]
+    }
+    ```
+  - Add below ENV-VAR to make our lambda code able to connect to our RDS-DB
+    ```
+    CONNECTION_URL=postgres://****:****@cruddur-db-instance.****.us-east-1.rds.amazonaws.com:5432/****
+    ```
+  - Add below `lambda layer` to make lambda use the Postgres Driver library in our code
+    ```shell
+    arn:aws:lambda:us-east-1:898466741470:layer:psycopg2-py38:2
+    ```
+  - Deploy lambda inside the same RDS-DB VPC by changing lambda VPC setting to be able to communicate with our DB.
+  - Update lambda_function.py with
+
+    ```python
+    import os
+    import json
+    import psycopg2
+
+    def lambda_handler(event, context):
+        user = event['request']['userAttributes']
+        user_display_name = user['name']
+        user_email = user['email']
+        user_handle = user['preferred_username']
+        user_cognito_id = user['sub']
+        try:
+            conn = psycopg2.connect(os.getenv('CONNECTION_URL'))
+            cur = conn.cursor()
+
+            sql = f"""
+            INSERT INTO public.users (display_name, email, handle, cognito_user_id)
+            VALUES('{user_display_name}', '{user_email}', '{user_handle}', '{user_cognito_id}')
+            """
+            cur.execute(sql)
+            conn.commit()
+
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+        finally:
+            if conn is not None:
+                cur.close()
+                conn.close()
+                print('Database connection closed.')
+
+        return event
+    ```
+
+  - Add Lambda triggers to our cognito user pool to be triggered when user `SignUp` with `Post confirmation trigger`.

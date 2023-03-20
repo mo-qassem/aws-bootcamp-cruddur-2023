@@ -4,7 +4,7 @@ if [ "$1" = "prod" ];
 then
     RED='\033[0;31m'
     NO_COLOR='\033[0m'
-    LABEL='USING PRODUCATION'
+    LABEL='USING PRODUCTION'
     printf "${RED}--- ${LABEL} ---${NO_COLOR}\n"
     URL=$PROD_CONNECTION_URL
 else
