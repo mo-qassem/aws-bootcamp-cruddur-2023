@@ -374,41 +374,41 @@
 
 - ### Update `devcontainer.json` to run `rds_update_sg` each time start Dev-Container Environment
 
-```json
+  ```json
   "postAttachCommand": "cd ./frontend-react-js && npm install && cd ../backend-flask && pip install -r requirements.txt --no-warn-script-location && export PATH='/home/cruddur/.local/bin:$PATH' && /usr/bin/chmod u+x /workspaces/aws-bootcamp-cruddur-2023/backend-flask/bin/* && /usr/bin/bash /workspaces/aws-bootcamp-cruddur-2023/backend-flask/bin/rds_update_sg "
-```
+  ```
 
-## 05. Create Cognito Trigger to insert user into database. [Commit](608b9f76c7c507d191986f21a3a0cb643c007210)
+## 05. Create Cognito Trigger to insert user into database. [:clipboard:](608b9f76c7c507d191986f21a3a0cb643c007210)
 
 - ### Update `schema.sql` and add additional attributes to `users` table
 
-```sql
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+  ```sql
+  CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-DROP TABLE IF EXISTS public.users;
-DROP TABLE IF EXISTS public.activities;
+  DROP TABLE IF EXISTS public.users;
+  DROP TABLE IF EXISTS public.activities;
 
-CREATE TABLE public.users (
-  uuid UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-  display_name text NOT NULL,
-  handle text NOT NULL,
-  email text NOT NULL,
-  cognito_user_id text NOT NULL,
-  created_at TIMESTAMP default current_timestamp NOT NULL
-);
+  CREATE TABLE public.users (
+    uuid UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    display_name text NOT NULL,
+    handle text NOT NULL,
+    email text NOT NULL,
+    cognito_user_id text NOT NULL,
+    created_at TIMESTAMP default current_timestamp NOT NULL
+  );
 
-CREATE TABLE public.activities (
-  uuid UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-  user_uuid UUID NOT NULL,
-  message text NOT NULL,
-  replies_count integer DEFAULT 0,
-  reposts_count integer DEFAULT 0,
-  likes_count integer DEFAULT 0,
-  reply_to_activity_uuid integer,
-  expires_at TIMESTAMP,
-  created_at TIMESTAMP default current_timestamp NOT NULL
-);
-```
+  CREATE TABLE public.activities (
+    uuid UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    user_uuid UUID NOT NULL,
+    message text NOT NULL,
+    replies_count integer DEFAULT 0,
+    reposts_count integer DEFAULT 0,
+    likes_count integer DEFAULT 0,
+    reply_to_activity_uuid integer,
+    expires_at TIMESTAMP,
+    created_at TIMESTAMP default current_timestamp NOT NULL
+  );
+  ```
 
 - ### Create lambda function to be triggered by AWS Cognito and add user info to RDS-DB
 
