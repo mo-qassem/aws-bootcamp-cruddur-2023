@@ -2,14 +2,18 @@
 
 ### Homework Tasks
 
-| TASKS                                                | COMPLETED          |
-| ---------------------------------------------------- | ------------------ |
-| Create RDS Postgres Instance.                        | :heavy_check_mark: |
-| Bash scripting for common database actions.          | :heavy_check_mark: |
-| Install Postgres Driver in Backend Application.      | :heavy_check_mark: |
-| Connect Gitpod to RDS Instance.                      | :heavy_check_mark: |
-| Create Cognito Trigger to insert user into database. | :heavy_check_mark: |
-| Create new activities with a database insert.        | :heavy_check_mark: |
+| VIDEOS                                                                                                                                    | WATCHED            |
+| ----------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| [Ashish's Week 4 - Security Considerations](https://www.youtube.com/watch?v=UourWxz7iQg&list=PLBfufR7vyJJ7k25byhRXJldB5AiwgNnWv&index=45) | :heavy_check_mark: |
+
+| TASKS                                                                                                           | COMPLETED          |
+| --------------------------------------------------------------------------------------------------------------- | ------------------ |
+| [Create RDS Postgres Instance.](#1-create-rds-postgres)                                                         | :heavy_check_mark: |
+| [Bash scripting for common database actions.](#2-bash-scripting-for-common-database-actions)                    | :heavy_check_mark: |
+| [Install Postgres Driver in Backend Application.](#03-install-postgres-driver-in-backend-application)           | :heavy_check_mark: |
+| [Connect Gitpod to RDS Instance.](#04-connect-local-dev-env-public-ip-to-rds-instance)                          | :heavy_check_mark: |
+| [Create Cognito Trigger to insert user into database.](#05-create-cognito-trigger-to-insert-user-into-database) | :heavy_check_mark: |
+| [Create new activities with a database insert.](#06-create-new-activities-with-a-database-insert)               | :heavy_check_mark: |
 
 ---
 
@@ -378,7 +382,7 @@
   "postAttachCommand": "cd ./frontend-react-js && npm install && cd ../backend-flask && pip install -r requirements.txt --no-warn-script-location && export PATH='/home/cruddur/.local/bin:$PATH' && /usr/bin/chmod u+x /workspaces/aws-bootcamp-cruddur-2023/backend-flask/bin/* && /usr/bin/bash /workspaces/aws-bootcamp-cruddur-2023/backend-flask/bin/rds_update_sg "
   ```
 
-## 05. Create Cognito Trigger to insert user into database. [:clipboard:](608b9f76c7c507d191986f21a3a0cb643c007210)
+## 05. Create Cognito Trigger to insert user into database.
 
 - ### Update `schema.sql` and add additional attributes to `users` table
 
@@ -476,3 +480,5 @@
     ```
 
   - Add Lambda triggers to our cognito user pool to be triggered when user `SignUp` with `Post confirmation trigger`.
+
+## 06. Create new activities with a database insert

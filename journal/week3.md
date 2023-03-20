@@ -2,14 +2,19 @@
 
 ### Homework Tasks
 
-| TASKS                                               | COMPLETED          |
-| --------------------------------------------------- | ------------------ |
-| Setup Cognito User Pool.                            | :heavy_check_mark: |
-| Implement Custom Signin Page.                       | :heavy_check_mark: |
-| Implement Custom Signup Page.                       | :heavy_check_mark: |
-| Implement Custom Confirmation Page.                 | :heavy_check_mark: |
-| Implement Custom Recovery Page.                     | :heavy_check_mark: |
-| Watch about different approaches to verifying JWTs. | :heavy_check_mark: |
+| VIDEOS                                                                                                                                          | WATCHED            |
+| ----------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| [Ashish's Week 3 - Decenteralized Authentication](https://www.youtube.com/watch?v=tEJIeII66pY&list=PLBfufR7vyJJ7k25byhRXJldB5AiwgNnWv&index=39) | :heavy_check_mark: |
+| [Different approaches to verifying JWTs](https://www.youtube.com/watch?v=nJjbI4BbasU&list=PLBfufR7vyJJ7k25byhRXJldB5AiwgNnWv&index=43)          | :heavy_check_mark: |
+
+| TASKS                                                                          | COMPLETED          |
+| ------------------------------------------------------------------------------ | ------------------ |
+| [Setup Cognito User Pool.](#1-setup-cognito-user-pool)                         | :heavy_check_mark: |
+| [Implement Custom Signin Page.](#02-implement-custom-signin-page)              | :heavy_check_mark: |
+| [Implement Custom Signup Page.](#03-implement-custom-signuppagejs)             | :heavy_check_mark: |
+| [Implement Custom Confirmation Page.](#04-implement-custom-confirmationpagejs) | :heavy_check_mark: |
+| [Implement Custom Recovery Page.](#05-implement-custom-recoverpagejs)          | :heavy_check_mark: |
+| [Verifying JWT through backend](#06-verifying-jwt-token-through-backend)       | :heavy_check_mark: |
 
 ---
 

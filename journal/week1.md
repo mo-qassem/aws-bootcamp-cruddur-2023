@@ -2,14 +2,21 @@
 
 ### Homework Tasks
 
-| TASKS                                                       | COMPLETED          |
-| ----------------------------------------------------------- | ------------------ |
-| Containerize Application (Dockerfiles, Docker Compose).     | :heavy_check_mark: |
-| Document the Notification Endpoint for the OpenAI Document. | :heavy_check_mark: |
-| Write a Flask Backend Endpoint for Notifications.           | :heavy_check_mark: |
-| Write a React Page for Notifications.                       | :heavy_check_mark: |
-| Run DynamoDB Local Container and ensure it works.           | :heavy_check_mark: |
-| Run Postgres Container and ensure it works.                 | :heavy_check_mark: |
+| VIDEOS                                                                                                                                              | WATCHED            |
+| --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| [How to Ask for Technical Help](https://www.youtube.com/watch?v=tDPqmwKMP7Y&list=PLBfufR7vyJJ7k25byhRXJldB5AiwgNnWv&index=29)                       | :heavy_check_mark: |
+| [Grading Homework Summaries](https://www.youtube.com/watch?v=FKAScachFgk&list=PLBfufR7vyJJ7k25byhRXJldB5AiwgNnWv&index=25)                          | :heavy_check_mark: |
+| [Ashish's Week 1 - Container Security Considerations](https://www.youtube.com/watch?v=OjZz4D0B-cA&list=PLBfufR7vyJJ7k25byhRXJldB5AiwgNnWv&index=25) | :heavy_check_mark: |
+| [Chirag's Week 1 - Spending Considerations](https://www.youtube.com/watch?v=OAMHu1NiYoI&list=PLBfufR7vyJJ7k25byhRXJldB5AiwgNnWv&index=24)           | :heavy_check_mark: |
+
+| TASKS                                                                                                                         | COMPLETED          |
+| ----------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| [Containerize Application (Dockerfiles, Docker Compose).](#1-containerize-application-dockerfiles-docker-compose)             | :heavy_check_mark: |
+| [Document the Notification Endpoint for the OpenAI Document.](#2-document-the-notification-endpoint-for-the-openapi-document) | :heavy_check_mark: |
+| [Write a Flask Backend Endpoint for Notifications.](#3-write-a-flask-backend-endpoint-for-notifications)                      | :heavy_check_mark: |
+| [Write a React Page for Notifications.](#4-write-a-react-page-for-notifications)                                              | :heavy_check_mark: |
+| [Run DynamoDB Local Container and ensure it works.](#5-run-dynamodb-local-container-and-ensure-it-works)                      | :heavy_check_mark: |
+| [Run Postgres Container and ensure it works.](#6-run-postgres-container-and-ensure-it-works)                                  | :heavy_check_mark: |
 
 ---
 
@@ -389,15 +396,15 @@
 
 ### Homework Challenges
 
-| TASKS                                                                                                                        | COMPLETED          |
-| ---------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| Run the dockerfile CMD as an external script.                                                                                | :heavy_check_mark: |
-| Push and tag a image to DockerHub (they have a free tier).                                                                   | :heavy_check_mark: |
-| Use multi-stage building for a Dockerfile build.                                                                             | :heavy_check_mark: |
-| Implement a healthcheck in the V3 Docker compose file.                                                                       | :heavy_check_mark: |
-| Research best practices of Dockerfiles and attempt to implement it in your Dockerfile.                                       | :heavy_check_mark: |
-| Learn how to install Docker on your localmachine and get the same containers running outside of Gitpod / Codespaces.         | :heavy_check_mark: |
-| Launch an EC2 instance that has docker installed, and pull a container to demonstrate you can run your own docker processes. | :heavy_check_mark: |
+| TASKS                                                                                                                                                                                                                                                          | COMPLETED          |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| [Run the dockerfile CMD as an external script.](#01-run-the-dockerfile-cmd-as-an-external-script)                                                                                                                                                              | :heavy_check_mark: |
+| [Push and tag a image to DockerHub (they have a free tier)](#02-push-and-tag-a-image-to-dockerhub-they-have-a-free-tier).                                                                                                                                      | :heavy_check_mark: |
+| [Use multi-stage building for a Dockerfile build.](#03-use-multi-stage-building-for-a-dockerfile-build)                                                                                                                                                        | :heavy_check_mark: |
+| [Implement a healthcheck in the V3 Docker compose file.](#04-implement-a-healthcheck-in-the-v3-docker-compose-file)                                                                                                                                            | :heavy_check_mark: |
+| [Research best practices of Dockerfiles and attempt to implement it in your Dockerfile.](#05-research-best-practices-of-dockerfiles-and-attempt-to-implement-it-in-your-dockerfile)                                                                            | :heavy_check_mark: |
+| [Learn how to install Docker on your localmachine and get the same containers running outside of Gitpod / Codespaces.](#06-learn-how-to-install-docker-on-your-localmachine-and-get-the-same-containers-running-outside-of-gitpod--codespaces)                 | :heavy_check_mark: |
+| [Launch an EC2 instance that has docker installed, and pull a container to demonstrate you can run your own docker processes.](#07-launch-an-ec2-instance-that-has-docker-installed-and-pull-a-container-to-demonstrate-you-can-run-your-own-docker-processes) | :heavy_check_mark: |
 
 ---
 

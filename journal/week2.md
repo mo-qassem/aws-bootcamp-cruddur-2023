@@ -2,12 +2,17 @@
 
 ### Homework Tasks
 
-| TASKS                                               | COMPLETED          |
-| --------------------------------------------------- | ------------------ |
-| Instrument Honeycomb with OTEL.                     | :heavy_check_mark: |
-| Instrument AWS X-Ray.                               | :heavy_check_mark: |
-| Configure custom logger to send to CloudWatch Logs. | :heavy_check_mark: |
-| Integrate Rollbar and capture and error.            | :heavy_check_mark: |
+| VIDEOS                                                                                                                                                  | WATCHED            |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| [Ashish's Week 2 - Observability Security Considerations](https://www.youtube.com/watch?v=bOf4ITxAcXc&list=PLBfufR7vyJJ7k25byhRXJldB5AiwgNnWv&index=31) | :heavy_check_mark: |
+| [Chirag Week 2 - Spending Considerations](https://www.youtube.com/watch?v=2W3KeqCjtDY)                                                                  | :heavy_check_mark: |
+
+| TASKS                                                                                                        | COMPLETED          |
+| ------------------------------------------------------------------------------------------------------------ | ------------------ |
+| [Instrument Honeycomb with OTEL.](#1-instrument-honeycomb-with-otel)                                         | :heavy_check_mark: |
+| [Instrument AWS X-Ray.](#2-instrument-aws-x-ray)                                                             | :heavy_check_mark: |
+| [Configure custom logger to send to CloudWatch Logs.](#3-configure-custom-logger-to-send-to-cloudwatch-logs) | :heavy_check_mark: |
+| [Integrate Rollbar and capture and error.](#4-integrate-rollbar-and-capture-and-error)                       | :heavy_check_mark: |
 
 ---
 
