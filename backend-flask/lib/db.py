@@ -49,7 +49,7 @@ class Db:
     try:
       with self.pool.connection() as conn:
         cur =  conn.cursor()
-        cur.execute(sql,params)
+        cur.execute(sql, params)
         if is_returning_id:
           returning_id = cur.fetchone()[0]
         conn.commit() 
